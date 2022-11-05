@@ -1,0 +1,81 @@
+#include "gui/menu_manager.hpp"
+
+#include <cassert>
+
+#include "game/manager.hpp"
+
+// Access the current instance of the menu manager directly from the game manager
+MenuManager&
+MenuManager::instance()
+{
+  assert(GameManager::instance().m_menu_manager);
+  return *GameManager::instance().m_menu_manager;
+}
+
+
+MenuManager::MenuManager() :
+  m_menu_stack()
+{
+}
+
+MenuManager::~MenuManager()
+{
+}
+
+void
+MenuManager::draw(RenderContext& context)
+{
+  if (!is_active()) return;
+
+  current_menu()->draw(context);
+}
+
+void
+MenuManager::process_event(SDL_Event& ev)
+{
+  if (!is_active()) return;
+
+  switch (ev.type)
+  {
+    case SDL_KEYDOWN:
+    {
+      switch (ev.key.keysym.sym)
+      {
+        case SDLK_ESCAPE:
+          pop_menu();
+          break;
+        default:
+          current_menu()->process_event(ev); // If none of the keys for navigation through menus is pressed, process the event in the current menu.
+          break;
+      }
+    }
+  }
+}
+
+// Menu management
+
+void
+MenuManager::push_menu(std::unique_ptr<Menu> menu)
+{
+  m_menu_stack.push_back(std::move(menu));
+}
+
+void
+MenuManager::push_menu(MenuType type)
+{
+  push_menu(MenuFactory::create(type));
+}
+
+void
+MenuManager::pop_menu()
+{
+  if (m_menu_stack.size() <= 1) return;
+
+  m_menu_stack.pop_back();
+}
+
+void
+MenuManager::clear_menu_stack()
+{
+  m_menu_stack.clear();
+}
