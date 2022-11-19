@@ -14,17 +14,44 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_VIDEO_COLOR_HEADER
-#define TUXJUMP_VIDEO_COLOR_HEADER
-
-#include <SDL2/SDL.h>
+#ifndef TUXJUMP_LEVEL_LEVEL_HEADER
+#define TUXJUMP_LEVEL_LEVEL_HEADER
 
 #include <string>
+#include <vector>
 
-class Color : public SDL_Color
+#include "level/tileset.hpp"
+#include "video/render_context.hpp"
+
+class Level final
 {
+private:
+  static Level* s_current;
+
 public:
-  std::string to_string() const { return std::to_string(r) + " " + std::to_string(g) + " " + std::to_string(b); }
+  static Level& current();
+
+private:
+  static const int s_tile_width;
+
+private:
+  std::unique_ptr<Tileset> m_tileset;
+  std::vector<int> m_tiles;
+  int m_width;
+  float m_spawn_height;
+
+public:
+  Level(const std::string file_path);
+  ~Level();
+
+  void draw(RenderContext& context);
+
+  // Get properties
+  const float& get_spawn_height() const { return m_spawn_height; }
+
+private:
+  Level(const Level&) = delete;
+  Level& operator=(const Level&) = delete;
 };
 
 #endif

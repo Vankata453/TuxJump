@@ -1,15 +1,36 @@
+//  TuxJump
+//  Copyright (C) 2022 Vankata453
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 #include "game/player.hpp"
 
 #include "game/global.hpp"
 #include "game/resources.hpp"
+#include "level/level.hpp"
 
+const float Player::s_default_spawn_height = 300.0f;
 const float Player::s_max_jump_height = 100.0f;
 const float Player::s_jump_speed = 0.15f;
 
 Player::Player() :
+  m_height(Level::current().get_spawn_height()),
   m_jump_height(0.0f),
   m_stop_jump(false)
 {
+  if (m_height < 0.0f) // Spawn height not set
+    m_height = s_default_spawn_height;
 }
 
 Player::~Player()
@@ -20,7 +41,7 @@ void
 Player::draw(RenderContext& context)
 {
   context.draw_image("data/images/tux.png", context.get_width() * 0.15,
-                      context.get_height() * 0.7 - m_jump_height, 40, 40);
+                      m_height - m_jump_height, 40, 40);
 }
 
 void

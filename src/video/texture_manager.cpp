@@ -1,3 +1,19 @@
+//  TuxJump
+//  Copyright (C) 2022 Vankata453
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 #include "video/texture_manager.hpp"
 
 #include "util/log.hpp"
@@ -35,7 +51,7 @@ TextureManager::load_image(std::string& path)
   SDL_Surface* surface = IMG_Load(("../" + path).c_str());
   if (!surface)
   {
-    log_fatal("Couldn't load image as surface: %s\n", SDL_GetError());
+    Log::fatal("Couldn't load image as surface: ", SDL_GetError());
   }
   SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer, surface);
   SDL_FreeSurface(surface);
@@ -44,7 +60,7 @@ TextureManager::load_image(std::string& path)
   return texture;
 }
 
-Text
+const Text&
 TextureManager::load_text(TTF_Font* font, std::string& text, Color& color)
 {
   if (m_text_textures.find(text) != m_text_textures.end())
@@ -54,22 +70,22 @@ TextureManager::load_text(TTF_Font* font, std::string& text, Color& color)
   SDL_Surface* text_surface = TTF_RenderText_Solid(font, text.c_str(), color);
   if (text_surface == NULL)
   {
-    log_fatal("Couldn't render text surface: %s\n", TTF_GetError());
+    Log::fatal("Couldn't render text surface: ", TTF_GetError());
   }
   SDL_Texture* text_texture = SDL_CreateTextureFromSurface(m_renderer, text_surface);
   if (text_texture == NULL)
   {
-    log_fatal("Couldn't create texture from text surface: %s\n", TTF_GetError());
+    Log::fatal("Couldn't create texture from text surface: ", TTF_GetError());
   }
   SDL_FreeSurface(text_surface);
 
-  Text result = { text_texture, { text_surface->w, text_surface->h } };
-  m_text_textures.insert({ text, result }); // Cache texture
-  return result;
+  Sizef text_size(static_cast<float>(text_surface->w), static_cast<float>(text_surface->h));
+  m_text_textures.insert({ text, { text_texture, text_size } }); // Cache texture
+  return m_text_textures[text];
 }
 
 SDL_Texture*
-TextureManager::load_filled_rect(Size size, Color& color)
+TextureManager::load_filled_rect(Sizef size, Color& color)
 {
   const std::string key = size.to_string() + " " + color.to_string();
   if (m_rect_textures.find(key) != m_rect_textures.end())
@@ -79,12 +95,12 @@ TextureManager::load_filled_rect(Size size, Color& color)
   SDL_Surface* color_surface = SDL_CreateRGBSurface(0, size.w, size.h, 1, color.r, color.g, color.b, 1);
   if (color_surface == NULL)
   {
-    log_fatal("Couldn't render color surface: %s\n", TTF_GetError());
+    Log::fatal("Couldn't render color surface: ", TTF_GetError());
   }
   SDL_Texture* color_texture = SDL_CreateTextureFromSurface(m_renderer, color_surface);
   if (color_texture == NULL)
   {
-    log_fatal("Couldn't create texture from color surface: %s\n", TTF_GetError());
+    Log::fatal("Couldn't create texture from color surface: ", TTF_GetError());
   }
   SDL_FreeSurface(color_surface);
 
