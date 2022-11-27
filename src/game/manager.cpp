@@ -21,38 +21,25 @@
 
 #include "game/manager.hpp"
 
-#include <cassert>
 #include <iostream>
 
 #include "game/resources.hpp"
 #include "gui/menu_manager.hpp"
-
-// Store an instance of the game manager at all times
-GameManager* GameManager::s_instance = nullptr;
-
-GameManager&
-GameManager::instance()
-{
-  assert(s_instance);
-  return *s_instance;
-}
-
 
 GameManager::GameManager() :
   // Define important to the game variables and instances
   m_menu_manager(std::make_unique<MenuManager>()),
   m_game_session(nullptr),
   m_mode(MODE_MENU),
+  m_start_game(false),
+  m_exit_game(false),
   m_quit(false)
 {
-  s_instance = this;
-
   m_menu_manager->push_menu(MenuType::MAIN_MENU); // Show the main menu
 }
 
 GameManager::~GameManager()
 {
-  s_instance = nullptr;
 }
 
 void
@@ -80,6 +67,8 @@ GameManager::draw(RenderContext& context)
     std::cout << err.what() << std::endl;
     quit_game();
   }
+
+  update();
 }
 
 void
@@ -109,24 +98,20 @@ GameManager::process_event(SDL_Event& ev)
   }
 }
 
-// Game mode management
-
 void
-GameManager::start_game()
+GameManager::update()
 {
-  m_game_session = std::make_unique<GameSession>();
-  m_mode = MODE_GAME;
-}
-
-void
-GameManager::exit_game()
-{
-  m_mode = MODE_MENU;
-  m_game_session = nullptr;
-}
-
-void
-GameManager::quit_game()
-{
-  m_quit = true; // Request game quit
+  // Process potential scheduled actions.
+  if (m_exit_game)
+  {
+    m_mode = MODE_MENU;
+    m_game_session.reset();
+    m_exit_game = false;
+  }
+  else if (m_start_game)
+  {
+    m_game_session.reset(new GameSession());
+    m_mode = MODE_GAME;
+    m_start_game = false;
+  }
 }

@@ -16,18 +16,7 @@
 
 #include "gui/menu_manager.hpp"
 
-#include <cassert>
-
 #include "game/manager.hpp"
-
-// Access the current instance of the menu manager directly from the game manager
-MenuManager&
-MenuManager::instance()
-{
-  assert(GameManager::instance().m_menu_manager);
-  return *GameManager::instance().m_menu_manager;
-}
-
 
 MenuManager::MenuManager() :
   m_menu_stack()

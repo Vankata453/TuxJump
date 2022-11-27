@@ -22,25 +22,16 @@
 #ifndef TUXJUMP_GAME_MANAGER_HEADER
 #define TUXJUMP_GAME_MANAGER_HEADER
 
+#include "util/current_object.hpp"
+
 #include <memory>
 
 #include "video/render_context.hpp"
 #include "game/session.hpp"
 #include "gui/menu_manager.hpp"
 
-class GameManager final
+class GameManager final : public CurrentObject<GameManager>
 {
-private:
-  static GameManager* s_instance;
-
-public:
-  static GameManager& instance();
-
-public:
-  // Store important to the game variables and instances
-  std::unique_ptr<MenuManager> m_menu_manager;
-  std::unique_ptr<GameSession> m_game_session;
-
 private:
   enum GameMode
   {
@@ -48,8 +39,17 @@ private:
     MODE_GAME
   };
 
-  GameMode m_mode;
-  bool m_quit; // Requested game quit
+private:
+  // Store important to the game variables and instances
+  std::unique_ptr<MenuManager> m_menu_manager;
+  std::unique_ptr<GameSession> m_game_session;
+
+  GameMode m_mode; // Current game mode
+
+  // Scheduled actions to be performed
+  bool m_start_game;
+  bool m_exit_game;
+  bool m_quit;
 
 public:
   GameManager();
@@ -59,12 +59,15 @@ public:
   void process_event(SDL_Event& ev);
 
   // Game mode management
-  void start_game();
-  void exit_game();
-  void quit_game();
+  void start_game() { m_start_game = true; }
+  void exit_game() { m_exit_game = true; }
+  void quit_game() { m_quit = true; }
 
   // Get properties
   bool quit_requested() const { return m_quit; }
+
+private:
+  void update();
 
 private:
   GameManager(const GameManager&) = delete;

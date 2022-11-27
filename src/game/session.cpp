@@ -16,14 +16,14 @@
 
 #include "game/session.hpp"
 
-#include "game/resources.hpp"
+#include "game/manager.hpp"
 
 const float GameSession::s_game_speed = 0.05f;
 
 GameSession::GameSession() :
+  m_col_manager(new CollisionManager()),
   m_level(new Level("data/levels/test.tjl")),
-  m_player(new Player()),
-  m_progress(0.0f)
+  m_player(new Player())
 {
 }
 
@@ -34,18 +34,30 @@ GameSession::~GameSession()
 void
 GameSession::draw(RenderContext& context)
 {
-  context.set_offset_x(m_progress);
   m_level->draw(context);
-  context.clear_offset_x();
 
   m_player->update();
   m_player->draw(context);
 
-  m_progress += s_game_speed;
+  m_level->apply_offset(s_game_speed);
 }
 
 void
 GameSession::process_event(SDL_Event& ev)
 {
-  m_player->process_event(ev);
+  switch (ev.type)
+  {
+    case SDL_KEYDOWN:
+    {
+      switch (ev.key.keysym.sym)
+      {
+        case SDLK_ESCAPE:
+          GameManager::current().exit_game();
+          break;
+        default:
+          m_player->process_event(ev);
+          break;
+      }
+    }
+  }
 }

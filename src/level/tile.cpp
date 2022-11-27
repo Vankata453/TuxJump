@@ -14,30 +14,22 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "gui/menu_factory.hpp"
+#include "level/tile.hpp"
 
-#include "game/manager.hpp"
-#include "gui/menu_manager.hpp"
+const float Tile::s_width = 32.0f;
 
-// Create a specified menu
-std::unique_ptr<Menu>
-MenuFactory::create(MenuType type)
+Tile::Tile(const int& id, int x, int y) :
+  CollisionObject({ x * s_width, y * s_width, s_width, s_width }),
+  m_id(id)
 {
-  auto menu = std::make_unique<Menu>();
-  switch (type)
-  {
-    case MAIN_MENU:
-    {
-      menu->add_item("Start Game", []() { GameManager::current().start_game(); });
-      menu->add_item("Options", []() { MenuManager::current().push_menu(OPTIONS_MENU); });
-      menu->add_item("Quit", []() { GameManager::current().quit_game(); });
-      break;
-    }
-    case OPTIONS_MENU:
-    {
-      // TODO
-      break;
-    }
-  }
-  return std::move(menu);
+}
+
+Tile::~Tile()
+{
+}
+
+void
+Tile::apply_offset(const float& offset)
+{
+  m_rect.x -= offset;
 }

@@ -14,34 +14,38 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_UTIL_LOG_HEADER
-#define TUXJUMP_UTIL_LOG_HEADER
+#ifndef TUXJUMP_UTIL_CURRENT_OBJECT_HEADER
+#define TUXJUMP_UTIL_CURRENT_OBJECT_HEADER
 
-#include <string>
-#include <iostream>
-#include <sstream>
+#include "util/log.hpp"
 
-#include "game/global.hpp"
-
-class Log
+// Allows global access to unique "current" instances of classes.
+template<class C>
+class CurrentObject
 {
+private:
+  static CurrentObject<C>* s_current;
+
 public:
-  static void warning(std::string text)
+  static C& current()
   {
-    std::cout << GAME_TITLE << ": Warning: " << text << std::endl;
+    C* current = dynamic_cast<C*>(s_current);
+    if (!current) Log::fatal("Cannot get CurrentObject: No current instance.");
+    return *current;
   }
 
-  // Thrown errors will be caught in the GameManager.
-  static void fatal(std::string text)
+public:
+  CurrentObject()
   {
-    throw std::runtime_error(GAME_TITLE + ": Fatal error: " + text);
+    if (s_current) Log::fatal("CurrentObject initialization error: Object already exists.");
+    s_current = this;
   }
-  static void fatal(std::string text, const char* data)
+  virtual ~CurrentObject()
   {
-    std::stringstream err;
-    err << GAME_TITLE << ": Fatal error: " << text << data << std::endl;
-    throw std::runtime_error(err.str());
+    s_current = nullptr;
   }
 };
+
+template<typename T> CurrentObject<T>* CurrentObject<T>::s_current = nullptr;
 
 #endif

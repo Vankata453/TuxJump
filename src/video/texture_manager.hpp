@@ -17,6 +17,8 @@
 #ifndef TUXJUMP_VIDEO_TEXTURE_MANAGER_HEADER
 #define TUXJUMP_VIDEO_TEXTURE_MANAGER_HEADER
 
+#include "util/current_object.hpp"
+
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 
@@ -26,7 +28,8 @@
 #include "video/color.hpp"
 #include "video/text.hpp"
 
-class TextureManager final
+// A class to create and cache textures of various types.
+class TextureManager final : public CurrentObject<TextureManager>
 {
 private:
   SDL_Renderer* m_renderer;
@@ -40,9 +43,13 @@ public:
   ~TextureManager();
 
   // Load textures
-  SDL_Texture* load_image(std::string& path);
-  const Text& load_text(TTF_Font* font, std::string& text, Color& color);
-  SDL_Texture* load_filled_rect(Sizef size, Color& color);
+  SDL_Texture* load_image(const std::string& path);
+  const Text& load_text(TTF_Font* font, const std::string& text, const Color& color);
+  SDL_Texture* load_filled_rect(Sizef size, const Color& color);
+
+  // Texture utilities
+  Size get_size(SDL_Texture* texture);
+  Sizef get_sizef(SDL_Texture* texture);
 
 private:
   TextureManager(const TextureManager&) = delete;

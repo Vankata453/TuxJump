@@ -22,6 +22,7 @@
 
 #include "video/texture_manager.hpp"
 
+// A class to allow rendering textures and shapes on screen.
 class RenderContext final
 {
 private:
@@ -47,10 +48,19 @@ public:
 
   // Draw textures
   void draw_texture(SDL_Texture* texture, float x, float y, float w, float h);
-  void draw_image(std::string path, float x, float y, float w, float h);
+  void draw_texture(SDL_Texture* texture, const Rectf& rect);
+
+  SDL_Texture* draw_image(std::string path, float x, float y, float w, float h);
+  SDL_Texture* draw_image(std::string path, const Rectf& rect);
+
   Rectf draw_text(TTF_Font* font, std::string text, float x, float y, Alignment alignment, Color& color);
+
   void draw_rect(float x, float y, float w, float h, Color& color);
+  void draw_rect(const Rectf& rect, Color& color);
+
   void draw_filled_rect(float x, float y, float w, float h, Color& color);
+  void draw_filled_rect(const Rectf& rect, Color& color);
+
   void draw_line(float x1, float y1, float x2, float y2, Color& color);
 
   // Get dynamic texture properties (without drawing)

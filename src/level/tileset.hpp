@@ -20,6 +20,10 @@
 #include <string>
 #include <map>
 
+#include "video/render_context.hpp"
+
+// A class, which points tile IDs to their respective images.
+// Also used to allow drawing a tile's texture on-screen.
 class Tileset final
 {
 private:
@@ -34,12 +38,18 @@ public:
   Tileset(const std::string& file);
   ~Tileset();
 
+  void draw_tile(RenderContext& context, const int& id, const Rectf& rect) const;
+
+  // Get properties
   std::string get_tiles_folder() const;
-  std::string get_tile_file(const int id) const;
 
 private:
   // Static utilities
   static std::string name_from_file(const std::string& file);
+
+private:
+  Tileset(const Tileset&) = delete;
+  Tileset& operator=(const Tileset&) = delete;
 };
 
 #endif

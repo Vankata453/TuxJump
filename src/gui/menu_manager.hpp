@@ -23,11 +23,8 @@
 #include "video/render_context.hpp"
 #include "gui/menu_factory.hpp"
 
-class MenuManager final
+class MenuManager final : public CurrentObject<MenuManager>
 {
-public:
-  static MenuManager& instance();
-
 private:
   std::vector<std::unique_ptr<Menu>> m_menu_stack;
 

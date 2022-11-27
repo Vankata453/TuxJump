@@ -17,32 +17,44 @@
 #ifndef TUXJUMP_GAME_PLAYER_HEADER
 #define TUXJUMP_GAME_PLAYER_HEADER
 
+#include "collision/listener.hpp"
+
 #include "video/render_context.hpp"
 
-class Player final
+class Player final : public CollisionListener
 {
 private:
   static const float s_default_spawn_height;
   static const float s_max_jump_height;
   static const float s_jump_speed;
+  static const float s_gravity_speed;
+
+  static const std::string s_image_file;
 
 private:
-  float m_height;
   float m_jump_height;
-  bool m_stop_jump;
 
 public:
   Player();
   ~Player();
 
-  void draw(RenderContext& context);
-  void update();
+  void draw(RenderContext& context) override;
   void process_event(SDL_Event& ev);
 
+  // Player actions
+  void kill();
+
 private:
+  // Collision events
+  void collision_top(CollisionObject* obj) override;
+  void collision_bottom(CollisionObject* obj) override;
+  void collision_left(CollisionObject* obj) override;
+  void collision_right(CollisionObject* obj) override;
+  void collision_none() override;
+
   // Player physics
   void jump();
-  void update_jump();
+  bool update_jump();
 
 private:
   Player(const Player&) = delete;

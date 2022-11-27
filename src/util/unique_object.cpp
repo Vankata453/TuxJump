@@ -14,30 +14,15 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "gui/menu_factory.hpp"
+#include "util/unique_object.hpp"
 
-#include "game/manager.hpp"
-#include "gui/menu_manager.hpp"
+int UniqueObject::s_id_counter = 1;
 
-// Create a specified menu
-std::unique_ptr<Menu>
-MenuFactory::create(MenuType type)
+UniqueObject::UniqueObject() :
+  m_id(s_id_counter++)
 {
-  auto menu = std::make_unique<Menu>();
-  switch (type)
-  {
-    case MAIN_MENU:
-    {
-      menu->add_item("Start Game", []() { GameManager::current().start_game(); });
-      menu->add_item("Options", []() { MenuManager::current().push_menu(OPTIONS_MENU); });
-      menu->add_item("Quit", []() { GameManager::current().quit_game(); });
-      break;
-    }
-    case OPTIONS_MENU:
-    {
-      // TODO
-      break;
-    }
-  }
-  return std::move(menu);
+}
+
+UniqueObject::~UniqueObject()
+{
 }

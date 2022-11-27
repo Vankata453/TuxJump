@@ -21,6 +21,7 @@
 #include <vector>
 #include <map>
 
+// A class to allow reading from a key-entry structured file.
 class FileReader final
 {
 public:
@@ -34,14 +35,16 @@ public:
   FileReader(const std::string path);
   ~FileReader();
 
-  const ReaderEntries& get_entries() const { return m_entries; }
   const std::string& get_string(const std::string key) const;
 
-  void get(const std::string key, int& var, int default_val);
-  void get(const std::string key, float& var, float default_val);
+  bool get(const std::string key, int& var);
+  bool get(const std::string key, float& var);
 
   std::vector<std::string> read_array(const std::string key, char delimiter = ',') const;
   std::vector<int> read_int_array(const std::string key, char delimiter = ',') const;
+
+  // Get properties
+  const ReaderEntries& get_entries() const { return m_entries; }
 
 private:
   FileReader(const FileReader&) = delete;

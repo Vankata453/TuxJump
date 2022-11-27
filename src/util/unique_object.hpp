@@ -14,30 +14,28 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "gui/menu_factory.hpp"
+#ifndef TUXJUMP_UTIL_UNIQUE_OBJECT_HEADER
+#define TUXJUMP_UTIL_UNIQUE_OBJECT_HEADER
 
-#include "game/manager.hpp"
-#include "gui/menu_manager.hpp"
-
-// Create a specified menu
-std::unique_ptr<Menu>
-MenuFactory::create(MenuType type)
+// Represents an object, which has a unique ID attached to it.
+class UniqueObject
 {
-  auto menu = std::make_unique<Menu>();
-  switch (type)
-  {
-    case MAIN_MENU:
-    {
-      menu->add_item("Start Game", []() { GameManager::current().start_game(); });
-      menu->add_item("Options", []() { MenuManager::current().push_menu(OPTIONS_MENU); });
-      menu->add_item("Quit", []() { GameManager::current().quit_game(); });
-      break;
-    }
-    case OPTIONS_MENU:
-    {
-      // TODO
-      break;
-    }
-  }
-  return std::move(menu);
-}
+private:
+  static int s_id_counter;
+
+private:
+  const int m_id;
+
+public:
+  UniqueObject();
+  ~UniqueObject();
+
+  // Get properties
+  const int& get_id() const { return m_id; }
+
+private:
+  UniqueObject(const UniqueObject&) = delete;
+  UniqueObject& operator=(const UniqueObject&) = delete;
+};
+
+#endif

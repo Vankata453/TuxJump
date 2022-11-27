@@ -14,8 +14,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_VIDEO_RECT_HEADER
-#define TUXJUMP_VIDEO_RECT_HEADER
+#ifndef TUXJUMP_MATH_RECT_HEADER
+#define TUXJUMP_MATH_RECT_HEADER
+
+#include <SDL2/SDL.h>
 
 #include <string>
 
@@ -37,7 +39,7 @@ public:
   float x;
   float y;
 
-  Positionf(float x_ = 0, float y_ = 0) : x(x_), y(y_) {}
+  Positionf(float x_ = 0.0f, float y_ = 0.0f) : x(x_), y(y_) {}
   ~Positionf() {}
 
   virtual std::string to_string() const { return std::to_string(x) + " " + std::to_string(y); }
@@ -62,7 +64,7 @@ public:
   float w;
   float h;
 
-  Sizef(float w_ = 0, float h_ = 0) : w(w_), h(h_) {}
+  Sizef(float w_ = 0.0f, float h_ = 0.0f) : w(w_), h(h_) {}
   ~Sizef() {}
 
   virtual std::string to_string() const { return std::to_string(w) + " " + std::to_string(h); }
@@ -84,7 +86,7 @@ class Rectf final : public Positionf,
                     public Sizef
 {
 public:
-  Rectf(float x_ = 0, float y_ = 0, float w_ = 0, float h_ = 0) : Positionf(x_, y_), Sizef(w_, h_) {}
+  Rectf(float x_ = 0.0f, float y_ = 0.0f, float w_ = 0.0f, float h_ = 0.0f) : Positionf(x_, y_), Sizef(w_, h_) {}
   ~Rectf() {}
 
   virtual std::string to_string() const override { return Positionf::to_string() + " " + Sizef::to_string(); }

@@ -36,20 +36,22 @@ Tileset::~Tileset()
 {
 }
 
-std::string
-Tileset::get_tiles_folder() const
-{
-  return s_tiles_folder + "/" + m_name;
-}
-
-std::string
-Tileset::get_tile_file(const int id) const
+void
+Tileset::draw_tile(RenderContext& context, const int& id, const Rectf& rect) const
 {
   auto it = m_tile_files.find(id);
   if (it == m_tile_files.end())
     Log::fatal("No tile with ID " + std::to_string(id));
 
-  return it->second;
+  context.draw_image(get_tiles_folder() + "/" + it->second, rect);
+}
+
+// Get properties
+
+std::string
+Tileset::get_tiles_folder() const
+{
+  return s_tiles_folder + "/" + m_name;
 }
 
 // Static utilities

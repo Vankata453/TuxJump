@@ -17,28 +17,40 @@
 #ifndef TUXJUMP_LEVEL_LEVEL_HEADER
 #define TUXJUMP_LEVEL_LEVEL_HEADER
 
+#include "util/current_object.hpp"
+
 #include <string>
 #include <vector>
+#include <memory>
 
+#include "level/tile.hpp"
 #include "level/tileset.hpp"
-#include "video/render_context.hpp"
 
-class Level final
+class FileReader;
+
+// A class to read and store level data.
+// Also currently used for managing tiles.
+class Level final : public CurrentObject<Level>
 {
-private:
-  static Level* s_current;
-
 public:
-  static Level& current();
+  // Level data class
+  class Data
+  {
+  public:
+    int width;
+    float spawn_height;
+
+  public:
+    Data();
+
+    void read(FileReader& reader);
+  };
 
 private:
-  static const int s_tile_width;
+  Data m_data;
 
-private:
   std::unique_ptr<Tileset> m_tileset;
-  std::vector<int> m_tiles;
-  int m_width;
-  float m_spawn_height;
+  std::vector<std::unique_ptr<Tile>> m_tiles;
 
 public:
   Level(const std::string file_path);
@@ -46,8 +58,14 @@ public:
 
   void draw(RenderContext& context);
 
+  void apply_offset(const float& offset);
+
   // Get properties
-  const float& get_spawn_height() const { return m_spawn_height; }
+  const Data& get_data() const { return m_data; }
+  const Tileset* get_tileset() const { return m_tileset.get(); }
+
+private:
+  void init_tiles(const std::vector<int> tiles);
 
 private:
   Level(const Level&) = delete;

@@ -14,30 +14,23 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "gui/menu_factory.hpp"
+#include "collision/entity.hpp"
 
-#include "game/manager.hpp"
-#include "gui/menu_manager.hpp"
+#include "game/resources.hpp"
 
-// Create a specified menu
-std::unique_ptr<Menu>
-MenuFactory::create(MenuType type)
+CollisionEntity::CollisionEntity(const Rectf rect) :
+  m_rect(std::move(rect)),
+  m_collides(false)
 {
-  auto menu = std::make_unique<Menu>();
-  switch (type)
-  {
-    case MAIN_MENU:
-    {
-      menu->add_item("Start Game", []() { GameManager::current().start_game(); });
-      menu->add_item("Options", []() { MenuManager::current().push_menu(OPTIONS_MENU); });
-      menu->add_item("Quit", []() { GameManager::current().quit_game(); });
-      break;
-    }
-    case OPTIONS_MENU:
-    {
-      // TODO
-      break;
-    }
-  }
-  return std::move(menu);
+}
+
+CollisionEntity::~CollisionEntity()
+{
+}
+
+void
+CollisionEntity::draw(RenderContext& context)
+{
+  // Draw collision rect. Use a different color when colliding.
+  context.draw_rect(m_rect, m_collides ? Resources::Colors::YELLOW : Resources::Colors::WHITE);
 }

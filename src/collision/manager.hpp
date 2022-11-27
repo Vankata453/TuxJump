@@ -14,34 +14,35 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_UTIL_LOG_HEADER
-#define TUXJUMP_UTIL_LOG_HEADER
+#ifndef TUXJUMP_COLLISION_MANAGER_HEADER
+#define TUXJUMP_COLLISION_MANAGER_HEADER
 
-#include <string>
-#include <iostream>
-#include <sstream>
+#include "util/current_object.hpp"
 
-#include "game/global.hpp"
+#include "collision/object.hpp"
 
-class Log
+// A class to store all active collision objects.
+class CollisionManager final : public CurrentObject<CollisionManager>
 {
 public:
-  static void warning(std::string text)
-  {
-    std::cout << GAME_TITLE << ": Warning: " << text << std::endl;
-  }
+  typedef std::vector<CollisionObject*> CollisionObjects;
 
-  // Thrown errors will be caught in the GameManager.
-  static void fatal(std::string text)
-  {
-    throw std::runtime_error(GAME_TITLE + ": Fatal error: " + text);
-  }
-  static void fatal(std::string text, const char* data)
-  {
-    std::stringstream err;
-    err << GAME_TITLE << ": Fatal error: " << text << data << std::endl;
-    throw std::runtime_error(err.str());
-  }
+private:
+  CollisionObjects m_col_objects;
+
+public:
+  CollisionManager();
+  ~CollisionManager();
+
+  void add_object(CollisionObject* obj);
+  void remove_object(const int id);
+
+  // Get properties
+  const CollisionObjects& get_objects() { return m_col_objects; }
+
+private:
+  CollisionManager(const CollisionManager&) = delete;
+  CollisionManager& operator=(const CollisionManager&) = delete;
 };
 
 #endif

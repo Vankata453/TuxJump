@@ -17,9 +17,10 @@
 #ifndef TUXJUMP_GAME_SESSION_HEADER
 #define TUXJUMP_GAME_SESSION_HEADER
 
-#include "video/render_context.hpp"
+#include "collision/manager.hpp"
 #include "game/player.hpp"
 #include "level/level.hpp"
+#include "video/render_context.hpp"
 
 class GameSession final
 {
@@ -27,10 +28,9 @@ private:
   static const float s_game_speed;
 
 private:
+  std::unique_ptr<CollisionManager> m_col_manager;
   std::unique_ptr<Level> m_level;
   std::unique_ptr<Player> m_player;
-
-  float m_progress;
 
 public:
   GameSession();

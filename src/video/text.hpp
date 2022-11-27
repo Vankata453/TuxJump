@@ -19,7 +19,7 @@
 
 #include <SDL2/SDL.h>
 
-#include "video/rect.hpp"
+#include "math/rect.hpp"
 
 struct Text
 {

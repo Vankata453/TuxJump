@@ -16,58 +16,66 @@
 
 #include "level/level.hpp"
 
-#include <cassert>
-
 #include "util/file_reader.hpp"
-//#include "util/log.hpp"
+#include "util/log.hpp"
 
-// Allow easy access to the current level at all times
-Level* Level::s_current = nullptr;
-
-Level&
-Level::current()
+Level::Data::Data() :
+  width(5),
+  spawn_height(-1.0f)
 {
-  assert(s_current);
-  return *s_current;
+}
+
+void
+Level::Data::read(FileReader& reader)
+{
+  reader.get("width", width);
+  reader.get("spawn_height", spawn_height);
 }
 
 
-const int Level::s_tile_width = 32;
-
 Level::Level(const std::string file_path) :
+  m_data(),
   m_tileset(),
-  m_tiles(),
-  m_width(),
-  m_spawn_height()
+  m_tiles()
 {
-  s_current = this;
-
   FileReader reader("../" + file_path);
 
+  m_data.read(reader);
+
   m_tileset.reset(new Tileset(reader.get_string("tileset")));
-  m_tiles = reader.read_int_array("tiles");
-  reader.get("width", m_width, 5);
-  reader.get("spawn_height", m_spawn_height, -1.0f);
+  init_tiles(reader.read_int_array("tiles"));
 }
 
 Level::~Level()
 {
-  s_current = nullptr;
+}
+
+void
+Level::init_tiles(const std::vector<int> tiles)
+{
+  int row = 0;
+  for (int i = 0; i < static_cast<int>(tiles.size()); i++)
+  {
+    if (tiles[i] <= 0) continue; // Empty tile
+
+    row = (i == 0 ? 0 : i / m_data.width);
+    m_tiles.push_back(std::make_unique<Tile>(tiles[i], i - row * m_data.width, row));
+  }
 }
 
 void
 Level::draw(RenderContext& context)
 {
-  const std::string tiles_folder = m_tileset->get_tiles_folder();
-  int row = 0;
-  for (int i = 0; i < static_cast<int>(m_tiles.size()); i++)
+  for (const auto& tile : m_tiles)
   {
-    const int& tile = m_tiles[i];
-    if (tile <= 0) continue; // Empty tile
-
-    row = (i == 0 ? 0 : i / m_width);
-    context.draw_image(tiles_folder + "/" + m_tileset->get_tile_file(tile),
-                        (i - row * m_width) * s_tile_width, row * s_tile_width,
-                        s_tile_width, s_tile_width);
+    m_tileset->draw_tile(context, tile->get_id(), tile->get_rect());
+    tile->draw(context); // Draw collision rect.
   }
+}
+
+void
+Level::apply_offset(const float& offset)
+{
+  for (const auto& tile : m_tiles)
+    tile->apply_offset(offset);
 }

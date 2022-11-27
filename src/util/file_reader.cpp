@@ -67,8 +67,8 @@ FileReader::get_string(const std::string key) const
 }
 
 
-void
-FileReader::get(const std::string key, int& var, int default_val)
+bool
+FileReader::get(const std::string key, int& var)
 {
   try
   {
@@ -76,12 +76,13 @@ FileReader::get(const std::string key, int& var, int default_val)
   }
   catch (...)
   {
-    var = default_val;
+    return false;
   }
+  return true;
 }
 
-void
-FileReader::get(const std::string key, float& var, float default_val)
+bool
+FileReader::get(const std::string key, float& var)
 {
   try
   {
@@ -89,8 +90,9 @@ FileReader::get(const std::string key, float& var, float default_val)
   }
   catch (...)
   {
-    var = default_val;
+    return false;
   }
+  return true;
 }
 
 

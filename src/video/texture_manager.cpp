@@ -42,7 +42,7 @@ TextureManager::~TextureManager()
 // Load textures
 
 SDL_Texture*
-TextureManager::load_image(std::string& path)
+TextureManager::load_image(const std::string& path)
 {
   if (m_image_textures.find(path) != m_image_textures.end())
     return m_image_textures[path]; // Texture exists
@@ -61,7 +61,7 @@ TextureManager::load_image(std::string& path)
 }
 
 const Text&
-TextureManager::load_text(TTF_Font* font, std::string& text, Color& color)
+TextureManager::load_text(TTF_Font* font, const std::string& text, const Color& color)
 {
   if (m_text_textures.find(text) != m_text_textures.end())
     return m_text_textures[text]; // Texture exists
@@ -85,7 +85,7 @@ TextureManager::load_text(TTF_Font* font, std::string& text, Color& color)
 }
 
 SDL_Texture*
-TextureManager::load_filled_rect(Sizef size, Color& color)
+TextureManager::load_filled_rect(Sizef size, const Color& color)
 {
   const std::string key = size.to_string() + " " + color.to_string();
   if (m_rect_textures.find(key) != m_rect_textures.end())
@@ -106,4 +106,21 @@ TextureManager::load_filled_rect(Sizef size, Color& color)
 
   m_rect_textures.insert({ key, color_texture }); // Cache texture
   return color_texture;
+}
+
+// Texture utilities
+
+Size
+TextureManager::get_size(SDL_Texture* texture)
+{
+  Size size;
+  SDL_QueryTexture(texture, NULL, NULL, &size.w, &size.h);
+  return size;
+}
+
+Sizef
+TextureManager::get_sizef(SDL_Texture* texture)
+{
+  Size size = get_size(texture);
+  return { static_cast<float>(size.w), static_cast<float>(size.h) };
 }

@@ -14,30 +14,31 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "gui/menu_factory.hpp"
+#include "collision/manager.hpp"
 
-#include "game/manager.hpp"
-#include "gui/menu_manager.hpp"
+#include <algorithm>
 
-// Create a specified menu
-std::unique_ptr<Menu>
-MenuFactory::create(MenuType type)
+CollisionManager::CollisionManager() :
+  m_col_objects()
 {
-  auto menu = std::make_unique<Menu>();
-  switch (type)
-  {
-    case MAIN_MENU:
-    {
-      menu->add_item("Start Game", []() { GameManager::current().start_game(); });
-      menu->add_item("Options", []() { MenuManager::current().push_menu(OPTIONS_MENU); });
-      menu->add_item("Quit", []() { GameManager::current().quit_game(); });
-      break;
-    }
-    case OPTIONS_MENU:
-    {
-      // TODO
-      break;
-    }
-  }
-  return std::move(menu);
+}
+
+CollisionManager::~CollisionManager()
+{
+}
+
+void
+CollisionManager::add_object(CollisionObject* obj)
+{
+  m_col_objects.push_back(obj);
+}
+
+void
+CollisionManager::remove_object(const int id)
+{
+  m_col_objects.erase(std::remove_if(m_col_objects.begin(), m_col_objects.end(),
+                        [id](CollisionObject* obj) {
+                            return obj->get_id() == id;
+                        }),
+                        m_col_objects.end());
 }

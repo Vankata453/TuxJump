@@ -84,9 +84,23 @@ RenderContext::draw_texture(SDL_Texture* texture, float x, float y, float w, flo
 }
 
 void
+RenderContext::draw_texture(SDL_Texture* texture, const Rectf& rect)
+{
+  draw_texture(texture, rect.x, rect.y, rect.w, rect.h);
+}
+
+SDL_Texture*
 RenderContext::draw_image(std::string path, float x, float y, float w, float h)
 {
-  draw_texture(m_texture_manager->load_image(path), x, y, w, h);
+  SDL_Texture* texture = m_texture_manager->load_image(path);
+  draw_texture(texture, x, y, w, h);
+  return texture;
+}
+
+SDL_Texture*
+RenderContext::draw_image(std::string path, const Rectf& rect)
+{
+  return draw_image(std::move(path), rect.x, rect.y, rect.w, rect.h);
 }
 
 Rectf
@@ -121,9 +135,21 @@ RenderContext::draw_rect(float x, float y, float w, float h, Color& color)
 }
 
 void
+RenderContext::draw_rect(const Rectf& rect, Color& color)
+{
+  draw_rect(rect.x, rect.y, rect.w, rect.h, color);
+}
+
+void
 RenderContext::draw_filled_rect(float x, float y, float w, float h, Color& color)
 {
   draw_texture(m_texture_manager->load_filled_rect({ w, h }, color), x, y, w, h);
+}
+
+void
+RenderContext::draw_filled_rect(const Rectf& rect, Color& color)
+{
+  draw_filled_rect(rect.x, rect.y, rect.w, rect.h, color);
 }
 
 void

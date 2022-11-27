@@ -14,30 +14,34 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "gui/menu_factory.hpp"
+#ifndef TUXJUMP_LEVEL_TILE_HEADER
+#define TUXJUMP_LEVEL_TILE_HEADER
 
-#include "game/manager.hpp"
-#include "gui/menu_manager.hpp"
+#include "collision/object.hpp"
 
-// Create a specified menu
-std::unique_ptr<Menu>
-MenuFactory::create(MenuType type)
+#include <string>
+
+// Represents a tile in a level, with which can occur collision.
+class Tile final : public CollisionObject
 {
-  auto menu = std::make_unique<Menu>();
-  switch (type)
-  {
-    case MAIN_MENU:
-    {
-      menu->add_item("Start Game", []() { GameManager::current().start_game(); });
-      menu->add_item("Options", []() { MenuManager::current().push_menu(OPTIONS_MENU); });
-      menu->add_item("Quit", []() { GameManager::current().quit_game(); });
-      break;
-    }
-    case OPTIONS_MENU:
-    {
-      // TODO
-      break;
-    }
-  }
-  return std::move(menu);
-}
+private:
+  static const float s_width;
+
+private:
+  const int m_id;
+
+public:
+  Tile(const int& id, int x, int y);
+  ~Tile();
+
+  void apply_offset(const float& offset);
+
+  // Get properties
+  const int& get_id() const { return m_id; }
+
+private:
+  Tile(const Tile&) = delete;
+  Tile& operator=(const Tile&) = delete;
+};
+
+#endif
