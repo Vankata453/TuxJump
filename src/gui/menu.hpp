@@ -23,8 +23,8 @@
 #include <functional>
 #include <vector>
 
-#include "video/render_context.hpp"
 #include "gui/menu_item.hpp"
+#include "video/render_context.hpp"
 
 class Menu final
 {

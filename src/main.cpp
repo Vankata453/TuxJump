@@ -18,10 +18,11 @@
 
 #include <string>
 
-#include "video/render_context.hpp"
-#include "game/manager.hpp"
 #include "game/global.hpp"
+#include "game/manager.hpp"
 #include "game/resources.hpp"
+#include "util/log.hpp"
+#include "video/render_context.hpp"
 
 int main(int argc, char* args[])
 {
@@ -42,9 +43,9 @@ int main(int argc, char* args[])
 		}
 		else
 		{
-      GameManager game_manager; // Define an instance of the game manager
       RenderContext context(window); // Create a rendering context (including renderer)
       SDL_Event ev; // Create an event handler
+      GameManager game_manager; // Define an instance of the game manager
 
       Resources::Fonts::init_fonts(); // Initialize fonts as resources
 

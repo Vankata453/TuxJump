@@ -16,6 +16,7 @@
 
 #include "video/texture_manager.hpp"
 
+#include "util/file_system.hpp"
 #include "util/log.hpp"
 
 TextureManager::TextureManager(SDL_Renderer* renderer) :
@@ -48,7 +49,7 @@ TextureManager::load_image(const std::string& path)
     return m_image_textures[path]; // Texture exists
 
 
-  SDL_Surface* surface = IMG_Load(("../" + path).c_str());
+  SDL_Surface* surface = IMG_Load(FileSystem::create_path(path).c_str());
   if (!surface)
   {
     Log::fatal("Couldn't load image as surface: ", SDL_GetError());

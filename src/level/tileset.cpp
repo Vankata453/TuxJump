@@ -17,6 +17,7 @@
 #include "level/tileset.hpp"
 
 #include "util/file_reader.hpp"
+#include "util/file_system.hpp"
 #include "util/log.hpp"
 
 const std::string Tileset::s_tiles_folder = "data/images/tiles";
@@ -26,7 +27,7 @@ Tileset::Tileset(const std::string& file) :
   m_name(name_from_file(file)),
   m_tile_files()
 {
-  FileReader reader("../" + s_tilesets_folder + "/" + file);
+  FileReader reader(FileSystem::create_path(FileSystem::join(s_tilesets_folder, file)));
 
   for (auto& tile_entry : reader.get_entries())
     m_tile_files[std::stoi(tile_entry.first)] = tile_entry.second;
@@ -43,7 +44,7 @@ Tileset::draw_tile(RenderContext& context, const int& id, const Rectf& rect) con
   if (it == m_tile_files.end())
     Log::fatal("No tile with ID " + std::to_string(id));
 
-  context.draw_image(get_tiles_folder() + "/" + it->second, rect);
+  context.draw_image(FileSystem::join(get_tiles_folder(), it->second), rect);
 }
 
 // Get properties
@@ -51,7 +52,7 @@ Tileset::draw_tile(RenderContext& context, const int& id, const Rectf& rect) con
 std::string
 Tileset::get_tiles_folder() const
 {
-  return s_tiles_folder + "/" + m_name;
+  return FileSystem::join(s_tiles_folder, m_name);
 }
 
 // Static utilities

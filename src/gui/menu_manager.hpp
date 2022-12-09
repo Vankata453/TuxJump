@@ -17,23 +17,25 @@
 #ifndef TUXJUMP_GUI_MENU_MANAGER_HEADER
 #define TUXJUMP_GUI_MENU_MANAGER_HEADER
 
+#include "game/mode.hpp"
+
 #include <memory>
 #include <vector>
 
-#include "video/render_context.hpp"
 #include "gui/menu_factory.hpp"
 
-class MenuManager final : public CurrentObject<MenuManager>
+class MenuManager final : public CurrentObject<MenuManager>,
+                          public GameMode
 {
 private:
   std::vector<std::unique_ptr<Menu>> m_menu_stack;
 
 public:
   MenuManager();
-  ~MenuManager();
+  ~MenuManager() override;
 
-  void draw(RenderContext& context);
-  void process_event(SDL_Event& event);
+  void draw(RenderContext& context) override;
+  void process_event(SDL_Event& ev) override;
 
   // Menu management
   void push_menu(std::unique_ptr<Menu> menu);

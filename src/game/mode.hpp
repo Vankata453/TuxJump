@@ -14,36 +14,23 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_GAME_SESSION_HEADER
-#define TUXJUMP_GAME_SESSION_HEADER
+#ifndef TUXJUMP_GAME_MODE_HEADER
+#define TUXJUMP_GAME_MODE_HEADER
 
-#include "game/mode.hpp"
-
-#include "collision/manager.hpp"
-#include "game/player.hpp"
-#include "level/level.hpp"
 #include "video/render_context.hpp"
 
-class GameSession final : public GameMode
+class GameMode
 {
-private:
-  static const float s_game_speed;
-
-private:
-  std::unique_ptr<CollisionManager> m_col_manager;
-  std::unique_ptr<Level> m_level;
-  std::unique_ptr<Player> m_player;
-
 public:
-  GameSession();
-  ~GameSession() override;
+  GameMode() {}
+  virtual ~GameMode() = default;
 
-  void draw(RenderContext& context) override;
-  void process_event(SDL_Event& ev) override;
+  virtual void draw(RenderContext& context) {}
+  virtual void process_event(SDL_Event& ev) {}
 
 private:
-  GameSession(const GameSession&) = delete;
-  GameSession& operator=(const GameSession&) = delete;
+  GameMode(const GameMode&) = delete;
+  GameMode& operator=(const GameMode&) = delete;
 };
 
 #endif

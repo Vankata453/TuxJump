@@ -17,7 +17,7 @@
 
 // The GameManager is the root to the management of main game events.
 // EXAMPLES: Drawing content on screen and processing events.
-// GameManager also stores important variables and instances for the game to function.
+// GameManager also manages the current game mode.
 
 #ifndef TUXJUMP_GAME_MANAGER_HEADER
 #define TUXJUMP_GAME_MANAGER_HEADER
@@ -25,31 +25,28 @@
 #include "util/current_object.hpp"
 
 #include <memory>
+#include <vector>
 
-#include "video/render_context.hpp"
-#include "game/session.hpp"
-#include "gui/menu_manager.hpp"
+#include "game/mode.hpp"
 
 class GameManager final : public CurrentObject<GameManager>
 {
 private:
-  enum GameMode
+  enum ScheduledAction
   {
-    MODE_MENU,
-    MODE_GAME
+    ACTION_START_GAME,
+    ACTION_EXIT_GAME
   };
 
 private:
-  // Store important to the game variables and instances
-  std::unique_ptr<MenuManager> m_menu_manager;
-  std::unique_ptr<GameSession> m_game_session;
-
-  GameMode m_mode; // Current game mode
-
-  // Scheduled actions to be performed
-  bool m_start_game;
-  bool m_exit_game;
+  // Indicate if the application should close.
   bool m_quit;
+
+  // Store the current game mode.
+  std::unique_ptr<GameMode> m_game_mode;
+
+  // Scheduled actions to be performed.
+  std::vector<ScheduledAction> m_scheduled_actions;
 
 public:
   GameManager();
@@ -59,12 +56,12 @@ public:
   void process_event(SDL_Event& ev);
 
   // Game mode management
-  void start_game() { m_start_game = true; }
-  void exit_game() { m_exit_game = true; }
+  void start_game() { m_scheduled_actions.push_back(ACTION_START_GAME); }
+  void exit_game() { m_scheduled_actions.push_back(ACTION_EXIT_GAME); }
   void quit_game() { m_quit = true; }
 
   // Get properties
-  bool quit_requested() const { return m_quit; }
+  const bool& quit_requested() const { return m_quit; }
 
 private:
   void update();

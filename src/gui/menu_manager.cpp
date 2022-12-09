@@ -21,6 +21,7 @@
 MenuManager::MenuManager() :
   m_menu_stack()
 {
+  push_menu(MenuType::MAIN_MENU); // Show the main menu by default.
 }
 
 MenuManager::~MenuManager()

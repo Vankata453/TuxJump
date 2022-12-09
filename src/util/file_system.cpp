@@ -14,36 +14,18 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_GAME_SESSION_HEADER
-#define TUXJUMP_GAME_SESSION_HEADER
+#include "util/file_system.hpp"
 
-#include "game/mode.hpp"
-
-#include "collision/manager.hpp"
-#include "game/player.hpp"
-#include "level/level.hpp"
-#include "video/render_context.hpp"
-
-class GameSession final : public GameMode
+// Create a relative path to a file.
+std::string
+FileSystem::create_path(const std::string file)
 {
-private:
-  static const float s_game_speed;
+  return "../" + file;
+}
 
-private:
-  std::unique_ptr<CollisionManager> m_col_manager;
-  std::unique_ptr<Level> m_level;
-  std::unique_ptr<Player> m_player;
-
-public:
-  GameSession();
-  ~GameSession() override;
-
-  void draw(RenderContext& context) override;
-  void process_event(SDL_Event& ev) override;
-
-private:
-  GameSession(const GameSession&) = delete;
-  GameSession& operator=(const GameSession&) = delete;
-};
-
-#endif
+// Join two parts of a path together.
+std::string
+FileSystem::join(const std::string lhs, const std::string rhs)
+{
+  return lhs + "/" + rhs;
+}

@@ -17,6 +17,7 @@
 #include "level/level.hpp"
 
 #include "util/file_reader.hpp"
+#include "util/file_system.hpp"
 #include "util/log.hpp"
 
 Level::Data::Data() :
@@ -38,7 +39,7 @@ Level::Level(const std::string file_path) :
   m_tileset(),
   m_tiles()
 {
-  FileReader reader("../" + file_path);
+  FileReader reader(FileSystem::create_path(file_path));
 
   m_data.read(reader);
 
