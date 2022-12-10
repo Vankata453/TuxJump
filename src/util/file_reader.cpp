@@ -20,7 +20,7 @@
 
 #include "util/log.hpp"
 
-FileReader::FileReader(const std::string path) :
+FileReader::FileReader(const std::string path, const char separator) :
   m_file(std::move(path)),
   m_entries()
 {
@@ -37,7 +37,7 @@ FileReader::FileReader(const std::string path) :
     {
       if (key_found)
         value += ch;
-      else if (ch == ' ')
+      else if (ch == separator)
         key_found = true;
       else
         key += ch;

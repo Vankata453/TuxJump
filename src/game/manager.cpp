@@ -27,49 +27,83 @@
 #include "game/session.hpp"
 #include "gui/menu_manager.hpp"
 
-GameManager::GameManager() :
+GameManager::GameManager(SDL_Window* window) :
   m_quit(false),
   m_game_mode(),
-  m_scheduled_actions()
+  m_scheduled_actions(),
+  m_render_context(window),
+  m_event_handler(),
+  m_game_config()
 {
+  try
+  {
+    // Perform required initializations.
+    Resources::Fonts::init_fonts();
+  }
+  catch (std::exception& err)
+  {
+    // Catch fatal errors.
+    std::cout << err.what() << std::endl;
+    quit_game();
+    return;
+  }
+
   exit_game(); // Schedule an action to start up the main menu.
   update();
 }
 
 GameManager::~GameManager()
 {
+  // Perform required destructions.
+  Resources::Fonts::close_fonts();
 }
 
 void
-GameManager::draw(RenderContext& context)
+GameManager::main_loop()
+{
+  // Main game loop
+  while (!m_quit)
+  {
+    try
+    {
+      // Process events, if any.
+      if (SDL_PollEvent(&m_event_handler) != 0)
+      {
+        if (m_event_handler.type == SDL_QUIT) // Quit registered by SDL
+        {
+          quit_game();
+        }
+        else
+        {
+          process_event();
+        }
+      }
+
+      // Draw content on screen.
+      m_render_context.render_clear();
+      draw();
+      m_render_context.render_present();
+    }
+    catch (std::exception& err)
+    {
+      // Catch fatal errors.
+      std::cout << err.what() << std::endl;
+      break;
+    }
+  }
+}
+
+void
+GameManager::draw()
 {
   update();
-
-  try
-  {
-    m_game_mode->draw(context);
-  }
-  catch (std::exception& err)
-  {
-    // Catch fatal errors
-    std::cout << err.what() << std::endl;
-    quit_game();
-  }
+  m_game_mode->draw(m_render_context);
 }
 
 void
-GameManager::process_event(SDL_Event& ev)
+GameManager::process_event()
 {
-  try
-  {
-    m_game_mode->process_event(ev);
-  }
-  catch (std::exception& err)
-  {
-    // Catch fatal errors
-    std::cout << err.what() << std::endl;
-    quit_game();
-  }
+  m_game_mode->process_event(m_event_handler);
 }
 
 void

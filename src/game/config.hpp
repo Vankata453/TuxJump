@@ -14,37 +14,24 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_UTIL_LOG_HEADER
-#define TUXJUMP_UTIL_LOG_HEADER
+#ifndef TUXJUMP_GAME_CONFIG_HEADER
+#define TUXJUMP_GAME_CONFIG_HEADER
+
+#include "util/current_object.hpp"
 
 #include <string>
-#include <iostream>
-#include <sstream>
 
-#include "game/global.hpp"
-
-class Log
+class GameConfig final : public CurrentObject<GameConfig>
 {
 public:
-  static void warning(std::string text)
-  {
-    std::cout << GAME_TITLE << ": Warning: " << text << std::endl;
-  }
+  // Store all config properties.
 
-  // Thrown errors will be caught in the GameManager.
-  template<typename T>
-  static void fatal(T text)
-  {
-    throw std::runtime_error(GAME_TITLE + ": Fatal error: " + text);
-  }
+public:
+  GameConfig();
+  ~GameConfig();
 
-  template<typename T, typename U>
-  static void fatal(T text, U data)
-  {
-    std::stringstream err;
-    err << GAME_TITLE << ": Fatal error: " << text << data << std::endl;
-    throw std::runtime_error(err.str());
-  }
+  void read();
+  void save();
 };
 
 #endif

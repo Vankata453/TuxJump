@@ -14,37 +14,18 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_UTIL_LOG_HEADER
-#define TUXJUMP_UTIL_LOG_HEADER
+#include "util/file_writer.hpp"
 
-#include <string>
-#include <iostream>
-#include <sstream>
+#include "util/log.hpp"
 
-#include "game/global.hpp"
-
-class Log
+FileWriter::FileWriter(const std::string path, const char separator) :
+  m_stream(std::move(path)),
+  m_separator(std::move(separator))
 {
-public:
-  static void warning(std::string text)
-  {
-    std::cout << GAME_TITLE << ": Warning: " << text << std::endl;
-  }
+  if (!m_stream) Log::fatal("Cannot open file for writing: " + path);
+}
 
-  // Thrown errors will be caught in the GameManager.
-  template<typename T>
-  static void fatal(T text)
-  {
-    throw std::runtime_error(GAME_TITLE + ": Fatal error: " + text);
-  }
-
-  template<typename T, typename U>
-  static void fatal(T text, U data)
-  {
-    std::stringstream err;
-    err << GAME_TITLE << ": Fatal error: " << text << data << std::endl;
-    throw std::runtime_error(err.str());
-  }
-};
-
-#endif
+FileWriter::~FileWriter()
+{
+  m_stream.close();
+}

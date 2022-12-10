@@ -27,6 +27,7 @@
 #include <memory>
 #include <vector>
 
+#include "game/config.hpp"
 #include "game/mode.hpp"
 
 class GameManager final : public CurrentObject<GameManager>
@@ -48,22 +49,26 @@ private:
   // Scheduled actions to be performed.
   std::vector<ScheduledAction> m_scheduled_actions;
 
+  // Store other important instances.
+  RenderContext m_render_context;
+  SDL_Event m_event_handler;
+  GameConfig m_game_config;
+
 public:
-  GameManager();
+  GameManager(SDL_Window* window);
   ~GameManager();
 
-  void draw(RenderContext& context);
-  void process_event(SDL_Event& ev);
+  void main_loop();
 
   // Game mode management
   void start_game() { m_scheduled_actions.push_back(ACTION_START_GAME); }
   void exit_game() { m_scheduled_actions.push_back(ACTION_EXIT_GAME); }
   void quit_game() { m_quit = true; }
 
-  // Get properties
-  const bool& quit_requested() const { return m_quit; }
-
 private:
+  void draw();
+  void process_event();
+
   void update();
 
 private:

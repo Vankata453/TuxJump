@@ -32,7 +32,7 @@ private:
   ReaderEntries m_entries;
 
 public:
-  FileReader(const std::string path);
+  FileReader(const std::string path, const char separator = ' ');
   ~FileReader();
 
   const std::string& get_string(const std::string key) const;

@@ -20,9 +20,6 @@
 
 #include "game/global.hpp"
 #include "game/manager.hpp"
-#include "game/resources.hpp"
-#include "util/log.hpp"
-#include "video/render_context.hpp"
 
 int main(int argc, char* args[])
 {
@@ -43,35 +40,10 @@ int main(int argc, char* args[])
 		}
 		else
 		{
-      RenderContext context(window); // Create a rendering context (including renderer)
-      SDL_Event ev; // Create an event handler
-      GameManager game_manager; // Define an instance of the game manager
-
-      Resources::Fonts::init_fonts(); // Initialize fonts as resources
-
-      // Main game loop
-      while (!game_manager.quit_requested())
-      {
-        if (SDL_PollEvent(&ev) != 0)
-        {
-          if (ev.type == SDL_QUIT) // Quit registered by SDL
-          {
-            game_manager.quit_game();
-          }
-          else
-          {
-            game_manager.process_event(ev);
-          }
-        }
-
-        context.render_clear();
-        game_manager.draw(context);
-        context.render_present();
-      }
+      GameManager(window).main_loop(); // Define an instance of the game manager.
 		}
 	}
 
-  Resources::Fonts::close_fonts(); // Close all fonts
 	SDL_DestroyWindow(window);
 	SDL_Quit();
 
