@@ -24,28 +24,41 @@ template<class C>
 class CurrentObject
 {
 private:
-  static CurrentObject<C>* s_current;
+  static C* s_current;
+  static CurrentObject<C>* s_temp_current; // Stores a pointer before one is contained in "s_current".
 
 public:
-  static C& current()
+  static C* current()
   {
-    C* current = dynamic_cast<C*>(s_current);
-    if (!current) Log::fatal("Cannot get CurrentObject: No current instance.");
-    return *current;
+    if (!s_current && !s_temp_current)
+    {
+      return nullptr;
+    }
+    else if (!s_current)
+    {
+      s_current = dynamic_cast<C*>(s_temp_current);
+      s_temp_current = nullptr;
+    }
+    return s_current;
   }
 
 public:
   CurrentObject()
   {
-    if (s_current) Log::fatal("CurrentObject initialization error: Object already exists.");
-    s_current = this;
+    if (s_current || s_temp_current)
+    {
+      Log::fatal("CurrentObject initialization error: Object already exists.");
+    }
+    s_temp_current = this;
   }
   virtual ~CurrentObject()
   {
     s_current = nullptr;
+    s_temp_current = nullptr;
   }
 };
 
-template<typename T> CurrentObject<T>* CurrentObject<T>::s_current = nullptr;
+template<typename T> T* CurrentObject<T>::s_current = nullptr;
+template<typename T> CurrentObject<T>* CurrentObject<T>::s_temp_current = nullptr;
 
 #endif

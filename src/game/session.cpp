@@ -52,7 +52,7 @@ GameSession::process_event(SDL_Event& ev)
       switch (ev.key.keysym.sym)
       {
         case SDLK_ESCAPE:
-          GameManager::current().exit_game();
+          GameManager::current()->exit_game();
           break;
         default:
           m_player->process_event(ev);

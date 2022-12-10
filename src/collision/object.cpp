@@ -23,23 +23,16 @@ CollisionObject::CollisionObject(const Rectf& rect) :
   UniqueObject(),
   CollisionEntity(rect)
 {
-  try
-  {
-    CollisionManager::current().add_object(this);
-  }
-  catch (...)
-  {
+  if (CollisionManager::current())
+    CollisionManager::current()->add_object(this);
+  else
     Log::warning("CollisionObject created, but not added to CollisionManager.");
-  }
 }
 
 CollisionObject::~CollisionObject()
 {
-  try
-  {
-    CollisionManager::current().remove_object(get_id());
-  }
-  catch (...) {}
+  if (CollisionManager::current())
+    CollisionManager::current()->remove_object(get_id());
 }
 
 CollisionType

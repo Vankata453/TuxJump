@@ -29,12 +29,12 @@ const std::string Player::s_image_file = "data/images/tux.png";
 
 
 Player::Player() :
-  CollisionListener({ 150, Level::current().get_data().spawn_height, 0, 0 }),
+  CollisionListener({ 150, Level::current()->get_data().spawn_height, 0, 0 }),
   m_jump_height(0.0f)
 {
   // Set up width and height, according to texture.
-  SDL_Texture* texture = TextureManager::current().load_image(s_image_file);
-  Sizef texture_size = TextureManager::current().get_sizef(texture);
+  SDL_Texture* texture = TextureManager::current()->load_image(s_image_file);
+  Sizef texture_size = TextureManager::current()->get_sizef(texture);
   m_rect.w = texture_size.w;
   m_rect.h = texture_size.h;
 
@@ -77,7 +77,7 @@ Player::process_event(SDL_Event& ev)
 void
 Player::kill()
 {
-  GameManager::current().exit_game(); // Temporary (TODO)
+  GameManager::current()->exit_game(); // Temporary (TODO)
 }
 
 // Collision events

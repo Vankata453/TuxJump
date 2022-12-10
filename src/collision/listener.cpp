@@ -20,7 +20,7 @@
 
 CollisionListener::CollisionListener(const Rectf rect) :
   CollisionEntity(std::move(rect)),
-  m_col_manager(CollisionManager::current())
+  m_col_manager(*CollisionManager::current())
 {
 }
 

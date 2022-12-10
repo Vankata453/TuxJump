@@ -28,9 +28,9 @@ MenuFactory::create(MenuType type)
   {
     case MAIN_MENU:
     {
-      menu->add_item("Start Game", []() { GameManager::current().start_game(); });
-      menu->add_item("Options", []() { MenuManager::current().push_menu(OPTIONS_MENU); });
-      menu->add_item("Quit", []() { GameManager::current().quit_game(); });
+      menu->add_item("Start Game", []() { GameManager::current()->start_game(); });
+      menu->add_item("Options", []() { MenuManager::current()->push_menu(OPTIONS_MENU); });
+      menu->add_item("Quit", []() { GameManager::current()->quit_game(); });
       break;
     }
     case OPTIONS_MENU:
