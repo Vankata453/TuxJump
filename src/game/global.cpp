@@ -17,7 +17,7 @@
 #include "game/global.hpp"
 
 // Important attributes for game startup
-const int SCREEN_WIDTH = 640;
+const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 480;
 
 // Information about the game
