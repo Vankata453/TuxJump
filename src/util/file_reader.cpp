@@ -81,31 +81,32 @@ FileReader::get(const std::string key, std::string& var)
   return true;
 }
 
+// Macro to help get string value.
+#define READER_GET_STRING_VALUE    \
+  std::string val;                 \
+  if (!get(key, val)) return false;
+
 bool
 FileReader::get(const std::string key, int& var)
 {
-  try
-  {
-    var = std::stoi(get_string(key));
-  }
-  catch (...)
-  {
-    return false;
-  }
+  READER_GET_STRING_VALUE;
+  var = std::stoi(val);
   return true;
 }
 
 bool
 FileReader::get(const std::string key, float& var)
 {
-  try
-  {
-    var = std::stof(get_string(key));
-  }
-  catch (...)
-  {
-    return false;
-  }
+  READER_GET_STRING_VALUE;
+  var = std::stof(val);
+  return true;
+}
+
+bool
+FileReader::get(const std::string key, bool& var)
+{
+  READER_GET_STRING_VALUE;
+  var = (val == "1");
   return true;
 }
 

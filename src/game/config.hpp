@@ -28,6 +28,7 @@ private:
 
 public:
   // Store all config properties.
+  bool show_col_rects;
 
 public:
   GameConfig();

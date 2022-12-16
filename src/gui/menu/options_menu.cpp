@@ -14,23 +14,38 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_GUI_MENU_FACTORY_HEADER
-#define TUXJUMP_GUI_MENU_FACTORY_HEADER
+#include "gui/menu/options_menu.hpp"
 
-#include <memory>
+#include "game/config.hpp"
+#include "gui/menu_manager.hpp"
 
-#include "gui/menu.hpp"
-
-enum MenuType
+OptionsMenu::OptionsMenu()
 {
-  MAIN_MENU,
-  OPTIONS_MENU,
-  CONTROLS_MENU
-};
+  refresh();
+}
 
-namespace MenuFactory
+void
+OptionsMenu::refresh()
 {
-  std::unique_ptr<Menu> create(MenuType type);
-};
+  clear();
 
-#endif
+  // Add options.
+  add_option("Show Collision Rects", CONFIG->show_col_rects);
+
+  // List additional menus.
+  add_item("Keyboard Controls",
+    []() {
+      MenuManager::current()->push_menu(CONTROLS_MENU);
+    });
+}
+
+
+void
+OptionsMenu::add_option(const std::string name, bool& var)
+{
+  add_item(name + ": " + (var ? "ON" : "OFF"),
+    [this, &var]() {
+      var = !var;
+      refresh();
+    });
+}

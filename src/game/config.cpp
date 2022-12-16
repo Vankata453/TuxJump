@@ -26,7 +26,9 @@ GameConfig* CONFIG = nullptr; // Allow global access to the config.
 
 const std::string GameConfig::s_target_file = "config.tjc";
 
-GameConfig::GameConfig()
+GameConfig::GameConfig() :
+  // Initialize config variables with default values.
+  show_col_rects(false)
 {
   CONFIG = this;
 
@@ -47,7 +49,11 @@ GameConfig::read()
   {
     FileReader reader(s_target_file);
 
+    // Initialize managers/systems.
     ControlManager::current()->read(reader);
+
+    // Initialize individual properties.
+    reader.get("show_col_rects", show_col_rects);
   }
   catch (...) // In a case when there isn't a config file.
   {
@@ -61,4 +67,6 @@ GameConfig::save()
   FileWriter writer(s_target_file);
 
   ControlManager::current()->write(writer);
+
+  writer.write("show_col_rects", show_col_rects);
 }

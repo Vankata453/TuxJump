@@ -40,6 +40,7 @@ public:
   bool get(const std::string key, std::string& var);
   bool get(const std::string key, int& var);
   bool get(const std::string key, float& var);
+  bool get(const std::string key, bool& var);
 
   std::vector<std::string> read_array(const std::string key, char delimiter = ',') const;
   std::vector<int> read_int_array(const std::string key, char delimiter = ',') const;

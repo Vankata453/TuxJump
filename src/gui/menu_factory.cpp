@@ -19,6 +19,7 @@
 #include "game/manager.hpp"
 #include "gui/menu_manager.hpp"
 #include "gui/menu/controls_menu.hpp"
+#include "gui/menu/options_menu.hpp"
 
 // Create a specified menu
 std::unique_ptr<Menu>
@@ -37,9 +38,12 @@ MenuFactory::create(MenuType type)
     }
     case OPTIONS_MENU:
     {
-      menu = new ControlsMenu; // TODO
+      menu = new OptionsMenu;
       break;
     }
+    case CONTROLS_MENU:
+      menu = new ControlsMenu;
+      break;
   }
   return std::unique_ptr<Menu>(menu);
 }

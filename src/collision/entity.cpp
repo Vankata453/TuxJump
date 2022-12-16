@@ -16,6 +16,7 @@
 
 #include "collision/entity.hpp"
 
+#include "game/config.hpp"
 #include "game/resources.hpp"
 
 CollisionEntity::CollisionEntity(const Rectf rect) :
@@ -32,5 +33,6 @@ void
 CollisionEntity::draw(RenderContext& context)
 {
   // Draw collision rect. Use a different color when colliding.
-  context.draw_rect(m_rect, m_collides ? Resources::Colors::YELLOW : Resources::Colors::WHITE);
+  if (CONFIG->show_col_rects)
+    context.draw_rect(m_rect, m_collides ? Resources::Colors::YELLOW : Resources::Colors::WHITE);
 }

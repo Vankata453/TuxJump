@@ -14,23 +14,24 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_GUI_MENU_FACTORY_HEADER
-#define TUXJUMP_GUI_MENU_FACTORY_HEADER
-
-#include <memory>
+#ifndef TUXJUMP_GUI_MENU_OPTIONS_MENU_HEADER
+#define TUXJUMP_GUI_MENU_OPTIONS_MENU_HEADER
 
 #include "gui/menu.hpp"
 
-enum MenuType
+class OptionsMenu final : public Menu
 {
-  MAIN_MENU,
-  OPTIONS_MENU,
-  CONTROLS_MENU
-};
+public:
+  OptionsMenu();
 
-namespace MenuFactory
-{
-  std::unique_ptr<Menu> create(MenuType type);
+  void refresh() override;
+
+private:
+  void add_option(const std::string name, bool& var);
+
+private:
+  OptionsMenu(const OptionsMenu&) = delete;
+  OptionsMenu& operator=(const OptionsMenu&) = delete;
 };
 
 #endif
