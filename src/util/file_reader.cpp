@@ -57,7 +57,7 @@ FileReader::~FileReader()
 }
 
 const std::string&
-FileReader::get_string(const std::string key) const
+FileReader::get_string(const std::string& key) const
 {
   auto it = m_entries.find(key);
   if (it == m_entries.end())
@@ -66,6 +66,20 @@ FileReader::get_string(const std::string key) const
   return it->second;
 }
 
+
+bool
+FileReader::get(const std::string key, std::string& var)
+{
+  try
+  {
+    var = get_string(key);
+  }
+  catch (...)
+  {
+    return false;
+  }
+  return true;
+}
 
 bool
 FileReader::get(const std::string key, int& var)

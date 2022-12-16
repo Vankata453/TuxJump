@@ -14,32 +14,39 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "gui/menu_factory.hpp"
+#ifndef TUXJUMP_CONTROL_MANAGER_HEADER
+#define TUXJUMP_CONTROL_MANAGER_HEADER
 
-#include "game/manager.hpp"
-#include "gui/menu_manager.hpp"
-#include "gui/menu/controls_menu.hpp"
+#include "util/current_object.hpp"
 
-// Create a specified menu
-std::unique_ptr<Menu>
-MenuFactory::create(MenuType type)
+#include <vector>
+
+#include "control/control.hpp"
+
+class FileReader;
+class FileWriter;
+
+class ControlManager final : public CurrentObject<ControlManager>
 {
-  Menu* menu;
-  switch (type)
-  {
-    case MAIN_MENU:
-    {
-      menu = new Menu;
-      menu->add_item("Start Game", []() { GameManager::current()->start_game(); });
-      menu->add_item("Options", []() { MenuManager::current()->push_menu(OPTIONS_MENU); });
-      menu->add_item("Quit", []() { GameManager::current()->quit_game(); });
-      break;
-    }
-    case OPTIONS_MENU:
-    {
-      menu = new ControlsMenu; // TODO
-      break;
-    }
-  }
-  return std::unique_ptr<Menu>(menu);
-}
+  friend class ControlsMenu;
+
+private:
+  std::vector<Control> m_controls;
+
+public:
+  ControlManager();
+  ~ControlManager();
+
+  void load();
+
+  void read(FileReader& reader);
+  void write(FileWriter& writer);
+
+  ControlAction get_action(const SDL_Keycode& key) const;
+
+private:
+  ControlManager(const ControlManager&) = delete;
+  ControlManager& operator=(const ControlManager&) = delete;
+};
+
+#endif

@@ -16,6 +16,7 @@
 
 #include "game/session.hpp"
 
+#include "control/manager.hpp"
 #include "game/manager.hpp"
 
 const float GameSession::s_game_speed = 0.05f;
@@ -55,7 +56,7 @@ GameSession::process_event(SDL_Event& ev)
           GameManager::current()->exit_game();
           break;
         default:
-          m_player->process_event(ev);
+          m_player->process_action(ControlManager::current()->get_action(ev.key.keysym.sym));
           break;
       }
     }

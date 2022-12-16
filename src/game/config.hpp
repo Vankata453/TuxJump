@@ -21,8 +21,11 @@
 
 #include <string>
 
-class GameConfig final : public CurrentObject<GameConfig>
+class GameConfig final
 {
+private:
+  static const std::string s_target_file;
+
 public:
   // Store all config properties.
 
@@ -33,5 +36,7 @@ public:
   void read();
   void save();
 };
+
+extern GameConfig* CONFIG;
 
 #endif

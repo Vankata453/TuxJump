@@ -17,10 +17,21 @@
 #include "gui/menu_item.hpp"
 
 #include "game/resources.hpp"
+#include "gui/menu_manager.hpp"
 
-MenuItem::MenuItem(const std::string text, const std::function<void ()>& callback) :
+// Item to execute a callback.
+MenuItem::MenuItem(const std::string text, const MenuItem::Callback& callback) :
   m_text(text),
-  m_callback(callback)
+  m_callback(callback),
+  m_id(-1)
+{
+}
+
+// Item to invoke "menu_action()" on its menu.
+MenuItem::MenuItem(const std::string text, int id) :
+  m_text(text),
+  m_callback([this]() { MenuManager::current()->current_menu()->menu_action(*this); }),
+  m_id(id)
 {
 }
 
@@ -38,13 +49,13 @@ MenuItem::draw(RenderContext& context, int x, int y, bool selected)
 }
 
 void
-MenuItem::process_event(SDL_Event& ev)
+MenuItem::process_action(const ControlAction& action)
 {
-  switch (ev.type)
+  switch (action)
   {
-    case SDL_KEYDOWN:
+    case ACTION_CONFIRM:
     {
-      if (ev.key.keysym.sym == SDLK_RETURN) m_callback(); // On "Enter" press, execute callback
+      m_callback();
       break;
     }
   }

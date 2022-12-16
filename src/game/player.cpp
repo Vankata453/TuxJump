@@ -55,19 +55,14 @@ Player::draw(RenderContext& context)
 }
 
 void
-Player::process_event(SDL_Event& ev)
+Player::process_action(ControlAction action)
 {
-  switch (ev.type)
+  switch (action)
   {
-    case SDL_KEYDOWN:
+    case ACTION_JUMP:
     {
-      switch (ev.key.keysym.sym)
-      {
-        case SDLK_SPACE:
-        case SDLK_UP:
-          jump();
-          break;
-      }
+      jump();
+      break;
     }
   }
 }

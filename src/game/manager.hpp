@@ -27,6 +27,7 @@
 #include <memory>
 #include <vector>
 
+#include "control/manager.hpp"
 #include "game/config.hpp"
 #include "game/mode.hpp"
 
@@ -52,6 +53,7 @@ private:
   // Store other important instances.
   RenderContext m_render_context;
   SDL_Event m_event_handler;
+  ControlManager m_control_manager;
   GameConfig m_game_config;
 
 public:

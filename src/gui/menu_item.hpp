@@ -23,24 +23,34 @@
 #include <functional>
 #include <string>
 
+#include "control/control.hpp"
 #include "video/render_context.hpp"
 
 class MenuItem final
 {
+public:
+  typedef std::function<void ()> Callback;
+
 private:
   std::string m_text;
-  std::function<void ()> m_callback;
+  Callback m_callback;
+  const int m_id;
 
 public:
-  MenuItem(const std::string text, const std::function<void ()>& callback = [](){});
+  // Allow creation of two types of items: ones that use a callback, and others that invoke "menu_action()".
+  MenuItem(const std::string text, const Callback& callback);
+  MenuItem(const std::string text, int id);
   ~MenuItem();
 
   void draw(RenderContext& context, int x, int y, bool selected);
-  void process_event(SDL_Event& ev);
+  void process_action(const ControlAction& action);
+
+  // Get properties
+  const int& get_id() const { return m_id; }
 
   // Set properties
   void set_text(const std::string text) { m_text = text; }
-  void set_callback(const std::function<void ()>& callback) { m_callback = callback; }
+  void set_callback(const Callback& callback) { m_callback = callback; }
 
 private:
   MenuItem(const MenuItem&) = delete;

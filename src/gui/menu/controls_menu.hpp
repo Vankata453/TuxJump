@@ -14,32 +14,31 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "gui/menu_factory.hpp"
+#ifndef TUXJUMP_GUI_MENU_CONTROLS_MENU_HEADER
+#define TUXJUMP_GUI_MENU_CONTROLS_MENU_HEADER
 
-#include "game/manager.hpp"
-#include "gui/menu_manager.hpp"
-#include "gui/menu/controls_menu.hpp"
+#include "gui/menu.hpp"
 
-// Create a specified menu
-std::unique_ptr<Menu>
-MenuFactory::create(MenuType type)
+#include "control/control.hpp"
+
+class ControlsMenu final : public Menu
 {
-  Menu* menu;
-  switch (type)
-  {
-    case MAIN_MENU:
-    {
-      menu = new Menu;
-      menu->add_item("Start Game", []() { GameManager::current()->start_game(); });
-      menu->add_item("Options", []() { MenuManager::current()->push_menu(OPTIONS_MENU); });
-      menu->add_item("Quit", []() { GameManager::current()->quit_game(); });
-      break;
-    }
-    case OPTIONS_MENU:
-    {
-      menu = new ControlsMenu; // TODO
-      break;
-    }
-  }
-  return std::unique_ptr<Menu>(menu);
-}
+private:
+  Control* m_modified_control;
+
+public:
+  ControlsMenu();
+
+  void refresh() override;
+
+  void draw(RenderContext& context) override;
+  void process_event(SDL_Event& ev) override;
+
+  void menu_action(MenuItem& item) override;
+
+private:
+  ControlsMenu(const ControlsMenu&) = delete;
+  ControlsMenu& operator=(const ControlsMenu&) = delete;
+};
+
+#endif

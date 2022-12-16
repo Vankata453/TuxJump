@@ -23,10 +23,11 @@
 #include <functional>
 #include <vector>
 
+#include "control/control.hpp"
 #include "gui/menu_item.hpp"
 #include "video/render_context.hpp"
 
-class Menu final
+class Menu
 {
 private:
   std::vector<std::unique_ptr<MenuItem>> m_items;
@@ -36,11 +37,19 @@ public:
   Menu();
   ~Menu();
 
+  virtual void refresh() {}
+
   virtual void draw(RenderContext& context);
   virtual void process_event(SDL_Event& ev);
 
+  virtual void menu_action(MenuItem& item) {}
+
   // Importing items
-  void add_item(const std::string name, const std::function<void ()>& callback = [](){});
+  template<typename... Args>
+  void add_item(Args&&... args)
+  {
+    m_items.push_back(std::make_unique<MenuItem>(std::forward<Args>(args)...));
+  }
 
   // Get dynamic properties (override to modify)
   virtual Position get_pos(Size context_size) { return { context_size.w / 2, context_size.h / 2 - context_size.h / 4 }; }
@@ -49,6 +58,9 @@ protected:
   // Menu actions
   void go_up();
   void go_down();
+
+  // Menu utilities
+  void clear();
 
 private:
   Menu(const Menu&) = delete;

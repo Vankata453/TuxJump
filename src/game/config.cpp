@@ -16,24 +16,49 @@
 
 #include "game/config.hpp"
 
+#include "control/manager.hpp"
 #include "util/file_reader.hpp"
+#include "util/file_writer.hpp"
+#include "util/log.hpp"
+
+GameConfig* CONFIG = nullptr; // Allow global access to the config.
+
+
+const std::string GameConfig::s_target_file = "config.tjc";
 
 GameConfig::GameConfig()
 {
+  CONFIG = this;
+
   read();
 }
 
 GameConfig::~GameConfig()
 {
   save();
+
+  CONFIG = nullptr;
 }
 
 void
 GameConfig::read()
 {
+  try
+  {
+    FileReader reader(s_target_file);
+
+    ControlManager::current()->read(reader);
+  }
+  catch (...) // In a case when there isn't a config file.
+  {
+    Log::warning("No '" + s_target_file + "' config file found.");
+  }
 }
 
 void
 GameConfig::save()
 {
+  FileWriter writer(s_target_file);
+
+  ControlManager::current()->write(writer);
 }

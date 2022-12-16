@@ -35,8 +35,9 @@ public:
   FileReader(const std::string path, const char separator = ' ');
   ~FileReader();
 
-  const std::string& get_string(const std::string key) const;
+  const std::string& get_string(const std::string& key) const;
 
+  bool get(const std::string key, std::string& var);
   bool get(const std::string key, int& var);
   bool get(const std::string key, float& var);
 

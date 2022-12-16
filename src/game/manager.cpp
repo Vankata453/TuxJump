@@ -33,6 +33,7 @@ GameManager::GameManager(SDL_Window* window) :
   m_scheduled_actions(),
   m_render_context(window),
   m_event_handler(),
+  m_control_manager(),
   m_game_config()
 {
   try

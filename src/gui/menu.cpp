@@ -16,6 +16,8 @@
 
 #include "gui/menu.hpp"
 
+#include "control/manager.hpp"
+
 Menu::Menu() :
   m_items(),
   m_selected_item(0)
@@ -41,32 +43,21 @@ Menu::process_event(SDL_Event& ev)
 {
   if (m_items.empty()) return;
 
-  switch (ev.type)
+  if (ev.type != SDL_KEYDOWN) return;
+  const ControlAction& action = ControlManager::current()->get_action(ev.key.keysym.sym);
+
+  switch (action)
   {
-    case SDL_KEYDOWN:
-    {
-      switch (ev.key.keysym.sym)
-      {
-        case SDLK_UP:
-          go_up();
-          break;
-        case SDLK_DOWN:
-          go_down();
-          break;
-        default:
-          m_items[m_selected_item]->process_event(ev); // If none of the menu navigation keys are pressed, process the event in the active item.
-          break;
-      }
-    }
+    case ACTION_UP:
+      go_up();
+      break;
+    case ACTION_DOWN:
+      go_down();
+      break;
+    default:
+      m_items[m_selected_item]->process_action(action); // If none of the menu navigation keys are pressed, process the event in the active item.
+      break;
   }
-}
-
-// Importing items
-
-void
-Menu::add_item(const std::string name, const std::function<void ()>& callback)
-{
-  m_items.push_back(std::make_unique<MenuItem>(name, callback));
 }
 
 // Menu actions
@@ -83,4 +74,12 @@ Menu::go_down()
 {
   m_selected_item++;
   if (m_selected_item >= static_cast<int>(m_items.size())) m_selected_item = 0;
+}
+
+// Menu utilities
+
+void
+Menu::clear()
+{
+  m_items.clear();
 }

@@ -19,6 +19,7 @@
 
 #include "collision/listener.hpp"
 
+#include "control/control.hpp"
 #include "video/render_context.hpp"
 
 class Player final : public CollisionListener
@@ -39,7 +40,7 @@ public:
   ~Player();
 
   void draw(RenderContext& context) override;
-  void process_event(SDL_Event& ev);
+  void process_action(ControlAction action);
 
   // Player actions
   void kill();

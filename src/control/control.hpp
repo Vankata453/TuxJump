@@ -14,32 +14,27 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "gui/menu_factory.hpp"
+#ifndef TUXJUMP_CONTROL_CONTROL_HEADER
+#define TUXJUMP_CONTROL_CONTROL_HEADER
 
-#include "game/manager.hpp"
-#include "gui/menu_manager.hpp"
-#include "gui/menu/controls_menu.hpp"
+#include <SDL2/SDL.h>
 
-// Create a specified menu
-std::unique_ptr<Menu>
-MenuFactory::create(MenuType type)
+#include <string>
+
+enum ControlAction
 {
-  Menu* menu;
-  switch (type)
-  {
-    case MAIN_MENU:
-    {
-      menu = new Menu;
-      menu->add_item("Start Game", []() { GameManager::current()->start_game(); });
-      menu->add_item("Options", []() { MenuManager::current()->push_menu(OPTIONS_MENU); });
-      menu->add_item("Quit", []() { GameManager::current()->quit_game(); });
-      break;
-    }
-    case OPTIONS_MENU:
-    {
-      menu = new ControlsMenu; // TODO
-      break;
-    }
-  }
-  return std::unique_ptr<Menu>(menu);
-}
+  ACTION_NONE,
+  ACTION_UP,
+  ACTION_DOWN,
+  ACTION_JUMP,
+  ACTION_CONFIRM
+};
+
+struct Control
+{
+  const ControlAction action;
+  const std::string name;
+  SDL_Keycode key;
+};
+
+#endif
