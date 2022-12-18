@@ -80,8 +80,10 @@ Player::kill()
 void
 Player::collision_top(CollisionObject* obj)
 {
+  // If the player had just jumped, remove the jump height that was added.
+  // Else, fall down via gravity.
+  m_rect.y += (m_jump_height == s_jump_speed ? s_jump_speed : s_gravity_speed);
   m_jump_height = 0.0f;
-  m_rect.y += s_gravity_speed;
 }
 
 void

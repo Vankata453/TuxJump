@@ -31,9 +31,9 @@ CollisionUtil::collision(const Rectf& s, const Rectf& t)
 
   if (x_match_left || x_match_right)
   {
-    if (y_match_top && std::ceil(t.y + t.h) >= s.y + s.h * 2)
+    if (y_match_top && (t.y + t.h) - (s.y + s.h * 2) >= -3)
       return COLLISION_TOP;
-    else if (y_match_bottom && std::floor(t.y) <= s.y - s.h)
+    else if (y_match_bottom && t.y - (s.y - s.h) <= 3)
       return COLLISION_BOTTOM;
   }
   if (y_match_top || y_match_bottom)
