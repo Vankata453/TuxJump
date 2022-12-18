@@ -34,6 +34,8 @@ private:
   std::unique_ptr<Level> m_level;
   std::unique_ptr<Player> m_player;
 
+  float m_progress;
+
 public:
   GameSession();
   ~GameSession() override;

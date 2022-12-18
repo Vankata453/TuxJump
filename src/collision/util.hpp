@@ -14,34 +14,15 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_LEVEL_TILE_HEADER
-#define TUXJUMP_LEVEL_TILE_HEADER
+#ifndef TUXJUMP_COLLISION_UTIL_HEADER
+#define TUXJUMP_COLLISION_UTIL_HEADER
 
-#include "collision/object.hpp"
+#include "collision/type.hpp"
+#include "math/rect.hpp"
 
-#include <string>
-
-// Represents a tile in a level, with which can occur collision.
-class Tile final : public CollisionObject
+namespace CollisionUtil
 {
-private:
-  static const float s_width;
-
-private:
-  const int m_id;
-
-public:
-  Tile(const int& id, int x, int y);
-  ~Tile();
-
-  void apply_offset(const float& offset);
-
-  // Get properties
-  const int& get_id() const { return m_id; }
-
-private:
-  Tile(const Tile&) = delete;
-  Tile& operator=(const Tile&) = delete;
-};
+  CollisionType collision(const Rectf& s, const Rectf& t);
+}
 
 #endif

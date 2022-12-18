@@ -33,7 +33,10 @@ private:
 
 public:
   FileReader(const std::string path, const char separator = ' ');
+  FileReader(const FileReader& base, const std::string category);
   ~FileReader();
+
+  FileReader for_subcategory(const std::string category);
 
   const std::string& get_string(const std::string& key) const;
 
@@ -46,6 +49,7 @@ public:
   std::vector<int> read_int_array(const std::string key, char delimiter = ',') const;
 
   // Get properties
+  const std::string& get_file() const { return m_file; }
   const ReaderEntries& get_entries() const { return m_entries; }
 
 private:

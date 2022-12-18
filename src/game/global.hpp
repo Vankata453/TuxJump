@@ -25,4 +25,6 @@ extern const int SCREEN_HEIGHT;
 extern const std::string GAME_TITLE;
 extern const bool GAME_DEV_BUILD;
 
+extern const float TILE_WIDTH;
+
 #endif

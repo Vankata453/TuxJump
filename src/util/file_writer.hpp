@@ -25,23 +25,32 @@
 class FileWriter final
 {
 private:
+  const std::string m_file;
   std::ofstream m_stream;
   const char m_separator;
+  const std::string m_category;
 
 public:
   FileWriter(const std::string path, const char separator = ' ');
+  FileWriter(const FileWriter& base, const std::string category);
   ~FileWriter();
+
+  FileWriter for_subcategory(const std::string category);
+
+  // Macro to help write key.
+  #define WRITER_WRITE_KEY                                                        \
+    m_stream << (m_category.empty() ? "" : m_category + "_") << key << m_separator
 
   template<typename T>
   void write(const std::string key, const T& val)
   {
-    m_stream << key << m_separator << val << std::endl;
+    WRITER_WRITE_KEY << val << std::endl;
   }
 
   template<typename T>
   void write_array(const std::string key, const std::vector<T>& arr, char delimiter = ',')
   {
-    m_stream << key << m_separator;
+    WRITER_WRITE_KEY;
 
     const char& newline = std::endl;
     const size_t arr_size = arr.size();
@@ -50,6 +59,10 @@ public:
       m_stream << arr[i] << (i < arr_size - 1 ? delimiter : newline);
     }
   }
+
+  // Get properties
+  const std::string& get_file() const { return m_file; }
+  const char& get_separator() const { return m_separator; }
 
 private:
   FileWriter(const FileWriter&) = delete;

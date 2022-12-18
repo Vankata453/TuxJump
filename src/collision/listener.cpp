@@ -17,10 +17,13 @@
 #include "collision/listener.hpp"
 
 #include "collision/manager.hpp"
+#include "collision/type.hpp"
+#include "level/level.hpp"
 
 CollisionListener::CollisionListener(const Rectf rect) :
   CollisionEntity(std::move(rect)),
-  m_col_manager(*CollisionManager::current())
+  m_col_manager(*CollisionManager::current()),
+  m_level(*Level::current())
 {
 }
 
@@ -29,32 +32,40 @@ CollisionListener::~CollisionListener()
 }
 
 void
-CollisionListener::update()
+CollisionListener::update(const float& x_offset, const float& y_offset)
 {
-  m_collides = false;
+  CollisionType col = COLLISION_NONE;
+  CollisionObject* obj;
 
   for (auto* obj : m_col_manager.get_objects())
   {
-    const CollisionType col = obj->collision(m_rect);
-    if (col == COLLISION_NONE) continue;
-
-    m_collides = true;
-    switch (col)
-    {
-      case COLLISION_TOP:
-        collision_top(obj);
-        break;
-      case COLLISION_BOTTOM:
-        collision_bottom(obj);
-        break;
-      case COLLISION_LEFT:
-        collision_left(obj);
-        break;
-      case COLLISION_RIGHT:
-        collision_right(obj);
-        break;
-    }
+    col = obj->collision(m_rect);
+    if (col != COLLISION_NONE)
+      break;
   }
 
-  if (!m_collides) collision_none();
+  if (col == COLLISION_NONE)
+  {
+    // Perform actions when there isn't any collision with objects.
+    col = m_level.collision(m_rect, x_offset, y_offset); // Check for tilemap collision.
+  }
+
+  m_collides = (col == COLLISION_NONE);
+  switch (col)
+  {
+    case COLLISION_TOP:
+      collision_top(obj);
+      break;
+    case COLLISION_BOTTOM:
+      collision_bottom(obj);
+      break;
+    case COLLISION_LEFT:
+      collision_left(obj);
+      break;
+    case COLLISION_RIGHT:
+      collision_right(obj);
+      break;
+    case COLLISION_NONE:
+      collision_none();
+  }
 }

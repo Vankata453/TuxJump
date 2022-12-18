@@ -14,24 +14,14 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "collision/object.hpp"
+#ifndef TUXJUMP_UTIL_STRING_HEADER
+#define TUXJUMP_UTIL_STRING_HEADER
 
-#include "collision/util.hpp"
+#include <string>
 
-CollisionObject::CollisionObject(const Rectf& rect) :
-  CollisionEntity(rect)
+namespace StringUtil
 {
+  bool starts_with(const std::string& str, std::string prefix);
 }
 
-CollisionObject::~CollisionObject()
-{
-}
-
-
-CollisionType
-CollisionObject::collision(const Rectf& t)
-{
-  CollisionType col = CollisionUtil::collision(m_rect, t);
-  m_collides = (col == COLLISION_NONE);
-  return col;
-}
+#endif

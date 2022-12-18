@@ -19,12 +19,13 @@
 #include "control/manager.hpp"
 #include "game/manager.hpp"
 
-const float GameSession::s_game_speed = 0.05f;
+const float GameSession::s_game_speed = 0.005f;
 
 GameSession::GameSession() :
   m_col_manager(new CollisionManager()),
   m_level(new Level("data/levels/test.tjl")),
-  m_player(new Player())
+  m_player(new Player()),
+  m_progress(0.0f)
 {
 }
 
@@ -35,12 +36,17 @@ GameSession::~GameSession()
 void
 GameSession::draw(RenderContext& context)
 {
-  m_level->draw(context);
+  // Draw level background and interactive layers.
+  m_level->draw(context, TileMap::LAYER_BACKGROUND, m_progress, 0.0f);
+  m_level->draw(context, TileMap::LAYER_INTERACTIVE, m_progress, 0.0f);
 
-  m_player->update();
+  m_player->update(m_progress, 0.0f);
   m_player->draw(context);
 
-  m_level->apply_offset(s_game_speed);
+  // Draw level foreground.
+  m_level->draw(context, TileMap::LAYER_FOREGROUND, m_progress, 0.0f);
+
+  m_progress += s_game_speed;
 }
 
 void

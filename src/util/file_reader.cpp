@@ -19,9 +19,11 @@
 #include <fstream>
 
 #include "util/log.hpp"
+#include "util/string.hpp"
 
+// File reader, using a file as a base.
 FileReader::FileReader(const std::string path, const char separator) :
-  m_file(std::move(path)),
+  m_file(path),
   m_entries()
 {
   std::ifstream reader(m_file);
@@ -52,9 +54,33 @@ FileReader::FileReader(const std::string path, const char separator) :
   reader.close();
 }
 
+// File reader, using a category in an existing file reader as a base.
+FileReader::FileReader(const FileReader& base, const std::string category) :
+  m_file(base.get_file()),
+  m_entries()
+{
+  for (const auto& entry : base.get_entries())
+  {
+    // Import all entries that start with the desired category string and an underscore.
+    if (StringUtil::starts_with(entry.first, category + "_"))
+      m_entries.insert({ entry.first.substr(category.size() + 1), entry.second });
+  }
+}
+
 FileReader::~FileReader()
 {
 }
+
+
+FileReader
+FileReader::for_subcategory(const std::string category)
+{
+  if (category.empty()) Log::fatal("No reader sub-category provided.");
+
+  // Return a new reader, which reads data from a desired sub-category in the current reader.
+  return FileReader(*this, category);
+}
+
 
 const std::string&
 FileReader::get_string(const std::string& key) const

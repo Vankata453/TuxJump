@@ -45,23 +45,23 @@ ControlManager::load()
 
 
 void
-ControlManager::read(FileReader& reader)
+ControlManager::read(FileReader reader)
 {
   // Read custom control binds.
   for (Control& control : m_controls)
   {
     std::string key_name;
-    if (reader.get("control_" + control.name, key_name))
+    if (reader.get(control.name, key_name))
       control.key = SDL_GetKeyFromName(key_name.c_str());
   }
 }
 
 void
-ControlManager::write(FileWriter& writer)
+ControlManager::write(FileWriter writer)
 {
   for (const Control& control : m_controls)
   {
-    writer.write("control_" + control.name, SDL_GetKeyName(control.key));
+    writer.write(control.name, SDL_GetKeyName(control.key));
   }
 }
 

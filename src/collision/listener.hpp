@@ -19,21 +19,22 @@
 
 #include "collision/entity.hpp"
 
-#include "collision/object.hpp"
-
 class CollisionManager;
+class CollisionObject;
+class Level;
 
-// A class to actively check for collision with objects on update.
+// A class to actively check for collision with tiles and objects on update.
 class CollisionListener : public CollisionEntity
 {
 private:
   CollisionManager& m_col_manager;
+  Level& m_level;
 
 public:
   CollisionListener(const Rectf rect);
   ~CollisionListener();
 
-  virtual void update();
+  virtual void update(const float& x_offset, const float& y_offset);
 
 protected:
   // Collision events

@@ -16,9 +16,10 @@
 
 #include "level/level.hpp"
 
+#include <algorithm>
+
 #include "util/file_reader.hpp"
 #include "util/file_system.hpp"
-#include "util/log.hpp"
 
 Level::Data::Data() :
   width(5),
@@ -37,46 +38,75 @@ Level::Data::read(FileReader& reader)
 Level::Level(const std::string file_path) :
   m_data(),
   m_tileset(),
-  m_tiles()
+  m_tilemaps()
 {
   FileReader reader(FileSystem::create_path(file_path));
 
+  // Read level data.
   m_data.read(reader);
 
-  m_tileset.reset(new Tileset(reader.get_string("tileset")));
-  init_tiles(reader.read_int_array("tiles"));
+  // Initialize the current tileset.
+  TileSet* tileset = new TileSet(reader.get_string("tileset"));
+  m_tileset.reset(tileset);
+
+  // Iterate through all tilemaps and load them.
+  FileReader tilemap_reader = reader.for_subcategory("tilemap");
+  std::vector<int> current_tiles;
+  for (int i = 0; i < 500; i++) // Allow for a maximum of 500 tilemaps.
+  {
+    try
+    {
+      FileReader tilemap_data_reader = tilemap_reader.for_subcategory(std::to_string(i));
+
+      // Get tilemap data.
+      int layer = 0;
+      tilemap_data_reader.get("layer", layer);
+
+      m_tilemaps.push_back(std::make_unique<TileMap>(layer, tilemap_data_reader.read_int_array("tiles"), tileset));
+    }
+    catch (...) // There are no more tilemaps available.
+    {
+      break;
+    }
+  }
+
+  // Sort tilemaps in ascending order by layer index.
+  std::sort(m_tilemaps.begin(), m_tilemaps.end(),
+    [](const auto& lhs, const auto& rhs) {
+      return lhs->get_layer() < rhs->get_layer();
+    });
 }
 
 Level::~Level()
 {
 }
 
-void
-Level::init_tiles(const std::vector<int> tiles)
-{
-  int row = 0;
-  for (int i = 0; i < static_cast<int>(tiles.size()); i++)
-  {
-    if (tiles[i] <= 0) continue; // Empty tile
 
-    row = (i == 0 ? 0 : i / m_data.width);
-    m_tiles.push_back(std::make_unique<Tile>(tiles[i], i - row * m_data.width, row));
+void
+Level::draw(RenderContext& context, TileMap::Layer layer,
+            const float& x_offset, const float& y_offset) const
+{
+  // Draw a specified tilemap layer type.
+  for (const auto& tilemap : m_tilemaps)
+  {
+    if (tilemap->get_layer_type() == layer)
+      tilemap->draw(context, x_offset, y_offset, m_data.width);
   }
 }
 
-void
-Level::draw(RenderContext& context)
+CollisionType
+Level::collision(const Rectf& target, const float& x_offset,
+                 const float& y_offset) const
 {
-  for (const auto& tile : m_tiles)
+  // Check for collision in interactive tilemaps.
+  for (const auto& tilemap : m_tilemaps)
   {
-    m_tileset->draw_tile(context, tile->get_id(), tile->get_rect());
-    tile->draw(context); // Draw collision rect.
-  }
-}
+    if (tilemap->get_layer_type() != TileMap::LAYER_INTERACTIVE) continue;
 
-void
-Level::apply_offset(const float& offset)
-{
-  for (const auto& tile : m_tiles)
-    tile->apply_offset(offset);
+    const CollisionType col = tilemap->collision(target, x_offset, y_offset, m_data.width);
+    if (col != COLLISION_NONE)
+      return col;
+  }
+
+  return COLLISION_NONE;
 }

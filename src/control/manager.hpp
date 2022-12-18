@@ -39,8 +39,8 @@ public:
 
   void load();
 
-  void read(FileReader& reader);
-  void write(FileWriter& writer);
+  void read(FileReader reader);
+  void write(FileWriter writer);
 
   ControlAction get_action(const SDL_Keycode& key) const;
 

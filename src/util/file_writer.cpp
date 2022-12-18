@@ -18,14 +18,36 @@
 
 #include "util/log.hpp"
 
+// File writer, using a file as a base.
 FileWriter::FileWriter(const std::string path, const char separator) :
-  m_stream(std::move(path)),
-  m_separator(std::move(separator))
+  m_file(path),
+  m_stream(m_file),
+  m_separator(separator),
+  m_category()
 {
   if (!m_stream) Log::fatal("Cannot open file for writing: " + path);
+}
+
+// File writer, using a category in an existing file writer as a base.
+FileWriter::FileWriter(const FileWriter& base, const std::string category) :
+  m_file(base.get_file()),
+  m_stream(m_file),
+  m_separator(base.get_separator()),
+  m_category(category)
+{
 }
 
 FileWriter::~FileWriter()
 {
   m_stream.close();
+}
+
+
+FileWriter
+FileWriter::for_subcategory(const std::string category)
+{
+  if (category.empty()) Log::fatal("No writer sub-category provided.");
+
+  // Return a new writer, which writes data for a desired sub-category in the current writer.
+  return FileWriter(*this, category);
 }

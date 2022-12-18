@@ -16,14 +16,19 @@
 
 #include "level/tileset.hpp"
 
+#include "game/config.hpp"
+#include "game/global.hpp"
+#include "game/resources.hpp"
+#include "math/rect.hpp"
 #include "util/file_reader.hpp"
 #include "util/file_system.hpp"
 #include "util/log.hpp"
+#include "video/render_context.hpp"
 
-const std::string Tileset::s_tiles_folder = "data/images/tiles";
-const std::string Tileset::s_tilesets_folder = "data/images/tilesets";
+const std::string TileSet::s_tiles_folder = "data/images/tiles";
+const std::string TileSet::s_tilesets_folder = "data/images/tilesets";
 
-Tileset::Tileset(const std::string& file) :
+TileSet::TileSet(const std::string& file) :
   m_name(name_from_file(file)),
   m_tile_files()
 {
@@ -33,24 +38,28 @@ Tileset::Tileset(const std::string& file) :
     m_tile_files[std::stoi(tile_entry.first)] = tile_entry.second;
 }
 
-Tileset::~Tileset()
+TileSet::~TileSet()
 {
 }
 
 void
-Tileset::draw_tile(RenderContext& context, const int& id, const Rectf& rect) const
+TileSet::draw_tile(RenderContext& context, const int& id, const Positionf& pos) const
 {
   auto it = m_tile_files.find(id);
   if (it == m_tile_files.end())
     Log::fatal("No tile with ID " + std::to_string(id));
 
+  const Rectf rect(TILE_WIDTH * pos.x, TILE_WIDTH * pos.y, TILE_WIDTH, TILE_WIDTH);
+
   context.draw_image(FileSystem::join(get_tiles_folder(), it->second), rect);
+  if (CONFIG->show_col_rects) // Draw collision rect, if enabled.
+    context.draw_rect(rect, Resources::Colors::RED);
 }
 
 // Get properties
 
 std::string
-Tileset::get_tiles_folder() const
+TileSet::get_tiles_folder() const
 {
   return FileSystem::join(s_tiles_folder, m_name);
 }
@@ -58,7 +67,7 @@ Tileset::get_tiles_folder() const
 // Static utilities
 
 std::string
-Tileset::name_from_file(const std::string& file)
+TileSet::name_from_file(const std::string& file)
 {
   size_t ext_pos = file.find_last_of('.');
   if (ext_pos == std::string::npos)

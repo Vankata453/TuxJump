@@ -58,6 +58,9 @@ namespace Resources
     // Define various colors by RGB
     Color BLACK = { 0, 0, 0 };
     Color WHITE = { 255, 255, 255 };
+    Color RED = { 255, 0, 0 };
+    Color GREEN = { 0, 255, 0 };
+    Color BLUE = { 0, 0, 255 };
     Color YELLOW = { 255, 255, 0 };
   }
 }

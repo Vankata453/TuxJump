@@ -23,13 +23,12 @@
 #include <vector>
 #include <memory>
 
-#include "level/tile.hpp"
+#include "level/tilemap.hpp"
 #include "level/tileset.hpp"
 
 class FileReader;
 
-// A class to read and store level data.
-// Also currently used for managing tiles.
+// A class to store and manage the current level and its data.
 class Level final : public CurrentObject<Level>
 {
 public:
@@ -49,23 +48,21 @@ public:
 private:
   Data m_data;
 
-  std::unique_ptr<Tileset> m_tileset;
-  std::vector<std::unique_ptr<Tile>> m_tiles;
+  std::unique_ptr<TileSet> m_tileset;
+  std::vector<std::unique_ptr<TileMap>> m_tilemaps;
 
 public:
   Level(const std::string file_path);
   ~Level();
 
-  void draw(RenderContext& context);
-
-  void apply_offset(const float& offset);
+  void draw(RenderContext& context, TileMap::Layer layer,
+            const float& x_offset, const float& y_offset) const;
+  CollisionType collision(const Rectf& target, const float& x_offset,
+                          const float& y_offset) const;
 
   // Get properties
   const Data& get_data() const { return m_data; }
-  const Tileset* get_tileset() const { return m_tileset.get(); }
-
-private:
-  void init_tiles(const std::vector<int> tiles);
+  const TileSet* get_tileset() const { return m_tileset.get(); }
 
 private:
   Level(const Level&) = delete;

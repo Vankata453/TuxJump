@@ -23,3 +23,6 @@ const int SCREEN_HEIGHT = 480;
 // Information about the game
 const std::string GAME_TITLE = "TuxJump";
 const bool GAME_DEV_BUILD = true;
+
+// Other globally used data variables
+const float TILE_WIDTH = 32.0f;

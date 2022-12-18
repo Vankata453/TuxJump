@@ -24,7 +24,7 @@
 
 #include "collision/type.hpp"
 
-// Represents a unique object with which collision can occur.
+// Represents a unique object which collision can occur with.
 class CollisionObject : public CollisionEntity,
                         public UniqueObject
 {

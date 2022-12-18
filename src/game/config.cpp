@@ -50,7 +50,7 @@ GameConfig::read()
     FileReader reader(s_target_file);
 
     // Initialize managers/systems.
-    ControlManager::current()->read(reader);
+    ControlManager::current()->read(reader.for_subcategory("control"));
 
     // Initialize individual properties.
     reader.get("show_col_rects", show_col_rects);
@@ -66,7 +66,9 @@ GameConfig::save()
 {
   FileWriter writer(s_target_file);
 
-  ControlManager::current()->write(writer);
+  // Write data for managers/systems.
+  ControlManager::current()->write(writer.for_subcategory("control"));
 
+  // Write data for individual properties.
   writer.write("show_col_rects", show_col_rects);
 }

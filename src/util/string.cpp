@@ -14,22 +14,10 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "level/tile.hpp"
+#include "util/string.hpp"
 
-const float Tile::s_width = 32.0f;
-
-Tile::Tile(const int& id, int x, int y) :
-  CollisionObject({ x * s_width, y * s_width, s_width, s_width }),
-  m_id(id)
+bool
+StringUtil::starts_with(const std::string& str, std::string prefix)
 {
-}
-
-Tile::~Tile()
-{
-}
-
-void
-Tile::apply_offset(const float& offset)
-{
-  m_rect.x -= offset;
+  return str.rfind(prefix, 0) == 0;
 }

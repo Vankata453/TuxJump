@@ -36,6 +36,9 @@ namespace Resources
   {
     extern Color BLACK;
     extern Color WHITE;
+    extern Color RED;
+    extern Color GREEN;
+    extern Color BLUE;
     extern Color YELLOW;
   }
 }
