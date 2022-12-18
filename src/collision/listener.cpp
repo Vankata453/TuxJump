@@ -50,7 +50,7 @@ CollisionListener::update(const float& x_offset, const float& y_offset)
     col = m_level.collision(m_rect, x_offset, y_offset); // Check for tilemap collision.
   }
 
-  m_collides = (col == COLLISION_NONE);
+  m_collides = (col != COLLISION_NONE);
   switch (col)
   {
     case COLLISION_TOP:

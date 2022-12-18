@@ -32,6 +32,6 @@ CollisionType
 CollisionObject::collision(const Rectf& t)
 {
   CollisionType col = CollisionUtil::collision(m_rect, t);
-  m_collides = (col == COLLISION_NONE);
+  m_collides = (col != COLLISION_NONE);
   return col;
 }
