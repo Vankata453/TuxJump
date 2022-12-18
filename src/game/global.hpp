@@ -21,6 +21,7 @@
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
+extern const int GAME_FPS;
 
 extern const std::string GAME_TITLE;
 extern const bool GAME_DEV_BUILD;

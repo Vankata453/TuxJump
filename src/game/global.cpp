@@ -19,6 +19,7 @@
 // Important attributes for game startup
 const int SCREEN_WIDTH = 1024;
 const int SCREEN_HEIGHT = 480;
+const int GAME_FPS = 60;
 
 // Information about the game
 const std::string GAME_TITLE = "TuxJump";

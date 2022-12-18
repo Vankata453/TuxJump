@@ -17,9 +17,10 @@
 #include "game/session.hpp"
 
 #include "control/manager.hpp"
+#include "game/global.hpp"
 #include "game/manager.hpp"
 
-const float GameSession::s_game_speed = 0.005f;
+const float GameSession::s_game_speed = GAME_FPS * 0.001f;
 
 GameSession::GameSession() :
   m_col_manager(new CollisionManager()),

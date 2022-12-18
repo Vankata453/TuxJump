@@ -16,14 +16,15 @@
 
 #include "game/player.hpp"
 
+#include "game/global.hpp"
 #include "game/manager.hpp"
 #include "game/resources.hpp"
 #include "level/level.hpp"
 
 const float Player::s_default_spawn_height = 300.0f;
 const float Player::s_max_jump_height = 100.0f;
-const float Player::s_jump_speed = 0.15f;
-const float Player::s_gravity_speed = 0.1f;
+const float Player::s_jump_speed = GAME_FPS * 0.07f;
+const float Player::s_gravity_speed = GAME_FPS * 0.05f;
 
 const std::string Player::s_image_file = "data/images/tux.png";
 

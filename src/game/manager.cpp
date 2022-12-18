@@ -27,8 +27,11 @@
 #include "game/session.hpp"
 #include "gui/menu_manager.hpp"
 
+const uint32_t GameManager::s_tick_interval = 1000 / GAME_FPS;
+
 GameManager::GameManager(SDL_Window* window) :
   m_quit(false),
+  m_next_tick(),
   m_game_mode(),
   m_scheduled_actions(),
   m_render_context(window),
@@ -62,6 +65,9 @@ GameManager::~GameManager()
 void
 GameManager::main_loop()
 {
+  // Initialize the next tick.
+  m_next_tick = SDL_GetTicks() + s_tick_interval;
+
   // Main game loop
   while (!m_quit)
   {
@@ -91,6 +97,12 @@ GameManager::main_loop()
       std::cout << err.what() << std::endl;
       break;
     }
+
+    // Wait for the next tick to accomplish a tick interval.
+    const uint32_t current_tick = SDL_GetTicks();
+    if (current_tick < m_next_tick)
+      SDL_Delay(m_next_tick - current_tick);
+    m_next_tick += s_tick_interval;
   }
 }
 

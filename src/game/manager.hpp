@@ -34,6 +34,10 @@
 class GameManager final : public CurrentObject<GameManager>
 {
 private:
+  // The interval in which game ticks should occur.
+  static const uint32_t s_tick_interval;
+
+private:
   enum ScheduledAction
   {
     ACTION_START_GAME,
@@ -43,6 +47,9 @@ private:
 private:
   // Indicate if the application should close.
   bool m_quit;
+
+  // Store the next tick the game loop should resume in.
+  uint32_t m_next_tick;
 
   // Store the current game mode.
   std::unique_ptr<GameMode> m_game_mode;
