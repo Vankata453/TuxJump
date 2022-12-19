@@ -55,9 +55,9 @@ GameConfig::read()
     // Initialize individual properties.
     reader.get("show_col_rects", show_col_rects);
   }
-  catch (...) // In a case when there isn't a config file.
+  catch (std::exception& err)
   {
-    Log::warning("No '" + s_target_file + "' config file found.");
+    Log::warning("Error reading config file '" + s_target_file + "': " + err.what());
   }
 }
 

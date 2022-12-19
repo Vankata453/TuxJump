@@ -40,7 +40,7 @@ Level::Level(const std::string file_path) :
   m_tileset(),
   m_tilemaps()
 {
-  FileReader reader(FileSystem::create_path(file_path));
+  FileReader reader(file_path);
 
   // Read level data.
   m_data.read(reader);

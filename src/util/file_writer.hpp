@@ -19,27 +19,32 @@
 
 #include <string>
 #include <vector>
-#include <fstream>
+#include <sstream>
+
+#include "game/global.hpp"
 
 // A class to allow writing key-entry structured files.
 class FileWriter final
 {
 private:
   const std::string m_file;
-  std::ofstream m_stream;
+  std::stringstream m_stream;
   const char m_separator;
+
+  // Variables, related to sub-category writing.
+  std::stringstream* m_base_stream;
   const std::string m_category;
 
 public:
   FileWriter(const std::string path, const char separator = ' ');
-  FileWriter(const FileWriter& base, const std::string category);
+  FileWriter(FileWriter& base, const std::string category);
   ~FileWriter();
 
   FileWriter for_subcategory(const std::string category);
 
   // Macro to help write key.
-  #define WRITER_WRITE_KEY                                                        \
-    m_stream << (m_category.empty() ? "" : m_category + "_") << key << m_separator
+  #define WRITER_WRITE_KEY                                                                            \
+    m_stream << (m_category.empty() ? "" : m_category + FILE_CATEGORY_SEPARATOR) << key << m_separator
 
   template<typename T>
   void write(const std::string key, const T& val)
@@ -62,7 +67,6 @@ public:
 
   // Get properties
   const std::string& get_file() const { return m_file; }
-  const char& get_separator() const { return m_separator; }
 
 private:
   FileWriter(const FileWriter&) = delete;

@@ -27,3 +27,4 @@ const bool GAME_DEV_BUILD = true;
 
 // Other globally used data variables
 const float TILE_WIDTH = 32.0f;
+const std::string FILE_CATEGORY_SEPARATOR = "->";

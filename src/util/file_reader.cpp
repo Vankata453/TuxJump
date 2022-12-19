@@ -16,8 +16,8 @@
 
 #include "util/file_reader.hpp"
 
-#include <fstream>
-
+#include "game/global.hpp"
+#include "util/file_system.hpp"
 #include "util/log.hpp"
 #include "util/string.hpp"
 
@@ -26,11 +26,11 @@ FileReader::FileReader(const std::string path, const char separator) :
   m_file(path),
   m_entries()
 {
-  std::ifstream reader(m_file);
-  if (!reader) Log::fatal("Cannot open file for reading: " + m_file);
+  // Read data from file.
+  std::stringstream data(FileSystem::read_file(m_file));
 
   // Read all lines of the file, parsing them into key-value entries.
-  for (std::string line; std::getline(reader, line);)
+  for (std::string line; std::getline(data, line);)
   {
     std::string key;
     std::string value;
@@ -45,13 +45,14 @@ FileReader::FileReader(const std::string path, const char separator) :
         key += ch;
     }
 
-    if (key.empty() || value.empty())
-      Log::fatal("Line " + line + " has empty key or value. Use space for separation of key-value.");
+    if (line.size() > 1 && (key.empty() || value.empty()))
+    {
+      Log::warning("Line " + line + " has empty key or value. Use space for separation of key-value.");
+      continue;
+    }
 
     m_entries.insert({ key, value });
   }
-
-  reader.close();
 }
 
 // File reader, using a category in an existing file reader as a base.
@@ -62,8 +63,8 @@ FileReader::FileReader(const FileReader& base, const std::string category) :
   for (const auto& entry : base.get_entries())
   {
     // Import all entries that start with the desired category string and an underscore.
-    if (StringUtil::starts_with(entry.first, category + "_"))
-      m_entries.insert({ entry.first.substr(category.size() + 1), entry.second });
+    if (StringUtil::starts_with(entry.first, category + FILE_CATEGORY_SEPARATOR))
+      m_entries.insert({ entry.first.substr(category.size() + FILE_CATEGORY_SEPARATOR.size()), entry.second });
   }
 }
 

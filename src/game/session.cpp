@@ -24,7 +24,7 @@ const float GameSession::s_game_speed = GAME_FPS * 0.001f;
 
 GameSession::GameSession() :
   m_col_manager(new CollisionManager()),
-  m_level(new Level("data/levels/test.tjl")),
+  m_level(new Level("levels/test.tjl")),
   m_player(new Player()),
   m_progress(0.0f)
 {

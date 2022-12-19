@@ -58,13 +58,14 @@ private:
   std::vector<ScheduledAction> m_scheduled_actions;
 
   // Store other important instances.
-  RenderContext m_render_context;
+  SDL_Window* m_window;
+  std::unique_ptr<RenderContext> m_render_context;
   SDL_Event m_event_handler;
-  ControlManager m_control_manager;
-  GameConfig m_game_config;
+  std::unique_ptr<ControlManager> m_control_manager;
+  std::unique_ptr<GameConfig> m_game_config;
 
 public:
-  GameManager(SDL_Window* window);
+  GameManager();
   ~GameManager();
 
   void main_loop();
@@ -75,7 +76,7 @@ public:
   void quit_game() { m_quit = true; }
 
 private:
-  void draw();
+  void draw(RenderContext& context);
   void process_event();
 
   void update();

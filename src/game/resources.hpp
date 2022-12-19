@@ -20,7 +20,6 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "video/color.hpp"
-#include "video/render_context.hpp"
 
 namespace Resources
 {

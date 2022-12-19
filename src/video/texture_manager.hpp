@@ -47,6 +47,9 @@ public:
   const Text& load_text(TTF_Font* font, const std::string& text, const Color& color);
   SDL_Texture* load_filled_rect(Sizef size, const Color& color);
 
+  // Load fonts
+  TTF_Font* load_font(const std::string& path, int size);
+
   // Texture utilities
   Size get_size(SDL_Texture* texture);
   Sizef get_sizef(SDL_Texture* texture);

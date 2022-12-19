@@ -27,5 +27,6 @@ extern const std::string GAME_TITLE;
 extern const bool GAME_DEV_BUILD;
 
 extern const float TILE_WIDTH;
+extern const std::string FILE_CATEGORY_SEPARATOR;
 
 #endif

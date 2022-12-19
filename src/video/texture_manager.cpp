@@ -49,7 +49,7 @@ TextureManager::load_image(const std::string& path)
     return m_image_textures[path]; // Texture exists
 
 
-  SDL_Surface* surface = IMG_Load(FileSystem::create_path(path).c_str());
+  SDL_Surface* surface = IMG_Load(FileSystem::join("data", path).c_str());
   if (!surface)
   {
     Log::fatal("Couldn't load image as surface: ", SDL_GetError());
@@ -107,6 +107,17 @@ TextureManager::load_filled_rect(Sizef size, const Color& color)
 
   m_rect_textures.insert({ key, color_texture }); // Cache texture
   return color_texture;
+}
+
+// Load fonts
+
+TTF_Font*
+TextureManager::load_font(const std::string& path, int size)
+{
+  TTF_Font* font = TTF_OpenFont(FileSystem::join("data", path).c_str(), size); // Load the default font
+  if (font == NULL)
+    Log::fatal("Couldn't load TTF font '" + path + "': ", TTF_GetError()); // Log font loading error
+  return font;
 }
 
 // Texture utilities

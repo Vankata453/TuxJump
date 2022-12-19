@@ -26,7 +26,7 @@ const float Player::s_max_jump_height = 100.0f;
 const float Player::s_jump_speed = GAME_FPS * 0.07f;
 const float Player::s_gravity_speed = GAME_FPS * 0.05f;
 
-const std::string Player::s_image_file = "data/images/tux.png";
+const std::string Player::s_image_file = "images/tux.png";
 
 
 Player::Player() :

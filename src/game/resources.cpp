@@ -16,8 +16,8 @@
 
 #include "game/resources.hpp"
 
-#include "util/file_system.hpp"
 #include "util/log.hpp"
+#include "video/texture_manager.hpp"
 
 namespace Resources
 {
@@ -35,11 +35,7 @@ namespace Resources
       }
 
       // Initialize fonts
-      DEFAULT = TTF_OpenFont(FileSystem::create_path("data/fonts/Roboto-Regular.ttf").c_str(), 24); // Load the default font
-      if (DEFAULT == NULL)
-      {
-        Log::fatal("Couldn't load default TTF font: ", TTF_GetError()); // Log font loading error
-      }
+      DEFAULT = TextureManager::current()->load_font("fonts/Roboto-Regular.ttf", 24);
     }
 
     void close_fonts()

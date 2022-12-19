@@ -26,15 +26,17 @@
 #include "game/resources.hpp"
 #include "game/session.hpp"
 #include "gui/menu_manager.hpp"
+#include "util/file_system.hpp"
 
 const uint32_t GameManager::s_tick_interval = 1000 / GAME_FPS;
 
-GameManager::GameManager(SDL_Window* window) :
+GameManager::GameManager() :
   m_quit(false),
   m_next_tick(),
   m_game_mode(),
   m_scheduled_actions(),
-  m_render_context(window),
+  m_window(),
+  m_render_context(),
   m_event_handler(),
   m_control_manager(),
   m_game_config()
@@ -42,6 +44,25 @@ GameManager::GameManager(SDL_Window* window) :
   try
   {
     // Perform required initializations.
+    FileSystem::init();
+    m_control_manager.reset(new ControlManager());
+    m_game_config.reset(new GameConfig());
+
+    // Intialize SDL.
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    {
+      Log::fatal("SDL could not initialize! SDL_Error: ", SDL_GetError());
+    }
+    // Create SDL window.
+    m_window = SDL_CreateWindow((GAME_TITLE + (GAME_DEV_BUILD ? " [DEVELOPMENT BUILD]" : "")).c_str(),
+                                SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                                SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    if (m_window == NULL)
+    {
+			Log::fatal("Window could not be created! SDL_Error: ", SDL_GetError());
+    }
+
+    m_render_context.reset(new RenderContext(m_window));
     Resources::Fonts::init_fonts();
   }
   catch (std::exception& err)
@@ -58,8 +79,26 @@ GameManager::GameManager(SDL_Window* window) :
 
 GameManager::~GameManager()
 {
-  // Perform required destructions.
-  Resources::Fonts::close_fonts();
+  try
+  {
+    // Perform required destructions.
+    Resources::Fonts::close_fonts();
+    m_render_context.reset();
+
+    SDL_DestroyWindow(m_window); // Destroy SDL window.
+    SDL_Quit(); // Quit SDL.
+
+    m_game_config.reset();
+    m_control_manager.reset();
+    FileSystem::deinit();
+  }
+  catch (std::exception& err)
+  {
+    // Catch fatal errors.
+    std::cout << err.what() << std::endl;
+    quit_game();
+    return;
+  }
 }
 
 void
@@ -67,6 +106,9 @@ GameManager::main_loop()
 {
   // Initialize the next tick.
   m_next_tick = SDL_GetTicks() + s_tick_interval;
+
+  // References to variables for convenience.
+  RenderContext& context = *m_render_context;
 
   // Main game loop
   while (!m_quit)
@@ -87,9 +129,9 @@ GameManager::main_loop()
       }
 
       // Draw content on screen.
-      m_render_context.render_clear();
-      draw();
-      m_render_context.render_present();
+      context.render_clear();
+      draw(context);
+      context.render_present();
     }
     catch (std::exception& err)
     {
@@ -107,10 +149,10 @@ GameManager::main_loop()
 }
 
 void
-GameManager::draw()
+GameManager::draw(RenderContext& context)
 {
   update();
-  m_game_mode->draw(m_render_context);
+  m_game_mode->draw(context);
 }
 
 void
@@ -129,12 +171,12 @@ GameManager::update()
     {
       case ACTION_EXIT_GAME:
       {
-        m_game_mode.reset(new MenuManager);
+        m_game_mode.reset(new MenuManager());
         break;
       }
       case ACTION_START_GAME:
       {
-        m_game_mode.reset(new GameSession);
+        m_game_mode.reset(new GameSession());
         break;
       }
     }

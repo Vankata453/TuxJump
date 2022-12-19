@@ -25,14 +25,14 @@
 #include "util/log.hpp"
 #include "video/render_context.hpp"
 
-const std::string TileSet::s_tiles_folder = "data/images/tiles";
-const std::string TileSet::s_tilesets_folder = "data/images/tilesets";
+const std::string TileSet::s_tiles_folder = "images/tiles";
+const std::string TileSet::s_tilesets_folder = "images/tilesets";
 
 TileSet::TileSet(const std::string& file) :
   m_name(name_from_file(file)),
   m_tile_files()
 {
-  FileReader reader(FileSystem::create_path(FileSystem::join(s_tilesets_folder, file)));
+  FileReader reader(FileSystem::join(s_tilesets_folder, file));
 
   for (auto& tile_entry : reader.get_entries())
     m_tile_files[std::stoi(tile_entry.first)] = tile_entry.second;

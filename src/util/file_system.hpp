@@ -18,10 +18,31 @@
 #define TUXJUMP_UTIL_FILE_SYSTEM_HEADER
 
 #include <string>
+#include <vector>
 
 namespace FileSystem
 {
-  std::string create_path(const std::string file);
+  // A class that takes the last PhysicsFS error and converts it to a readable message.
+  class PhysfsError final : public std::exception
+  {
+  private:
+    std::string m_message;
+
+  public:
+    PhysfsError(const std::string message, const std::string action) throw();
+
+    const char* what() const throw() { return m_message.c_str(); }
+  };
+
+  // General file system management functions.
+  void init();
+  void deinit();
+
+  std::vector<std::string> get_files(const std::string dir = "");
+
+  std::string read_file(const std::string& file);
+  void write_file(const std::string& file, const std::string& data);
+
   std::string join(const std::string lhs, const std::string rhs);
 }
 
