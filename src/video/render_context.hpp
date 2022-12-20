@@ -18,7 +18,6 @@
 #define TUXJUMP_VIDEO_RENDER_CONTEXT_HEADER
 
 #include <memory>
-#include <string>
 
 #include "video/texture_manager.hpp"
 
@@ -28,11 +27,6 @@ class RenderContext final
 private:
   SDL_Renderer* m_renderer;
   std::unique_ptr<TextureManager> m_texture_manager;
-
-  const int m_width;
-  const int m_height;
-
-  Positionf m_offset;
 
 public:
   RenderContext(SDL_Window* window);
@@ -68,15 +62,9 @@ public:
   Sizef get_text_size(TTF_Font* font, const std::string& text);
 
   // Get properties
-  const int& get_width() const { return m_width; }
-  const int& get_height() const { return m_height; }
-  Size get_size() const { return Size(m_width, m_height); }
-
-  // Set properties
-  void set_offset_x(const float& new_offset) { m_offset.x = new_offset; }
-  void set_offset_y(const float& new_offset) { m_offset.y = new_offset; }
-  void clear_offset_x() { m_offset.x = 0.0f; }
-  void clear_offset_y() { m_offset.y = 0.0f; }
+  const int& get_width() const;
+  const int& get_height() const;
+  Size get_size() const { return Size(get_width(), get_height()); }
 
 private:
   RenderContext(const RenderContext&) = delete;

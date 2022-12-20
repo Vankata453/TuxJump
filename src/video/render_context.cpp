@@ -23,10 +23,7 @@
 
 RenderContext::RenderContext(SDL_Window* window) :
   m_renderer(nullptr),
-  m_texture_manager(),
-  m_width(SCREEN_WIDTH),
-  m_height(SCREEN_HEIGHT),
-  m_offset(0.0f, 0.0f)
+  m_texture_manager()
 {
   // Create renderer
   m_renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
@@ -50,8 +47,8 @@ RenderContext::~RenderContext()
 void
 RenderContext::render_clear()
 {
-  SDL_RenderClear(m_renderer);
   reset_color();
+  SDL_RenderClear(m_renderer);
 }
 
 void
@@ -71,7 +68,7 @@ RenderContext::reset_color()
 SDL_FRect
 RenderContext::create_rect(const float& x, const float& y, const float& w, const float& h) const
 {
-  return { x - m_offset.x, y - m_offset.y, w, h };
+  return { x, y, w, h };
 }
 
 // Draw textures
@@ -129,7 +126,7 @@ void
 RenderContext::draw_rect(const float& x, const float& y, const float& w, const float& h, const Color& color)
 {
   SDL_FRect render_rect = create_rect(x, y, w, h);
-  SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, 1); // Temporarily set render draw color
+  SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a); // Temporarily set render draw color
   SDL_RenderDrawRectF(m_renderer, &render_rect);
 
   reset_color();
@@ -144,7 +141,11 @@ RenderContext::draw_rect(const Rectf& rect, const Color& color)
 void
 RenderContext::draw_filled_rect(const float& x, const float& y, const float& w, const float& h, const Color& color)
 {
-  draw_texture(m_texture_manager->load_filled_rect({ w, h }, color), x, y, w, h);
+  SDL_FRect render_rect = create_rect(x, y, w, h);
+  SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a); // Temporarily set render draw color
+  SDL_RenderFillRectF(m_renderer, &render_rect);
+
+  reset_color();
 }
 
 void
@@ -156,8 +157,8 @@ RenderContext::draw_filled_rect(const Rectf& rect, const Color& color)
 void
 RenderContext::draw_line(const float& x1, const float& y1, const float& x2, const float& y2, const Color& color)
 {
-  SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, 1); // Temporarily set render draw color
-  SDL_RenderDrawLine(m_renderer, x1 - m_offset.x, y1 - m_offset.y, x2 - m_offset.x, y2 - m_offset.y);
+  SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a); // Temporarily set render draw color
+  SDL_RenderDrawLine(m_renderer, x1, y1, x2, y2);
 
   reset_color();
 }
@@ -168,4 +169,18 @@ Sizef
 RenderContext::get_text_size(TTF_Font* font, const std::string& text)
 {
   return m_texture_manager->load_text(font, text, Resources::Colors::WHITE).size; // Return size of text surface
+}
+
+// Get properties
+
+const int&
+RenderContext::get_width() const
+{
+  return SCREEN_WIDTH;
+}
+
+const int&
+RenderContext::get_height() const
+{
+  return SCREEN_HEIGHT;
 }

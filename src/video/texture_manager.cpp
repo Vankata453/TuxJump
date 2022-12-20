@@ -22,8 +22,7 @@
 TextureManager::TextureManager(SDL_Renderer* renderer) :
   m_renderer(renderer),
   m_image_textures(),
-  m_text_textures(),
-  m_rect_textures()
+  m_text_textures()
 {
 }
 
@@ -35,9 +34,6 @@ TextureManager::~TextureManager()
 
   for (auto& texture_data : m_text_textures)
     SDL_DestroyTexture(texture_data.second.texture);
-
-  for (auto& texture_data : m_rect_textures)
-    SDL_DestroyTexture(texture_data.second);
 }
 
 // Load textures
@@ -68,7 +64,7 @@ TextureManager::load_text(TTF_Font* font, const std::string& text, const Color& 
     return m_text_textures[text]; // Texture exists
 
 
-  SDL_Surface* text_surface = TTF_RenderText_Solid(font, text.c_str(), color);
+  SDL_Surface* text_surface = TTF_RenderText_Solid(font, text.c_str(), color.to_sdl());
   if (text_surface == NULL)
   {
     Log::fatal("Couldn't render text surface: ", TTF_GetError());
@@ -85,36 +81,12 @@ TextureManager::load_text(TTF_Font* font, const std::string& text, const Color& 
   return m_text_textures[text];
 }
 
-SDL_Texture*
-TextureManager::load_filled_rect(Sizef size, const Color& color)
-{
-  const std::string key = size.to_string() + " " + color.to_string();
-  if (m_rect_textures.find(key) != m_rect_textures.end())
-    return m_rect_textures[key]; // Texture exists
-
-
-  SDL_Surface* color_surface = SDL_CreateRGBSurface(0, size.w, size.h, 1, color.r, color.g, color.b, 1);
-  if (color_surface == NULL)
-  {
-    Log::fatal("Couldn't render color surface: ", TTF_GetError());
-  }
-  SDL_Texture* color_texture = SDL_CreateTextureFromSurface(m_renderer, color_surface);
-  if (color_texture == NULL)
-  {
-    Log::fatal("Couldn't create texture from color surface: ", TTF_GetError());
-  }
-  SDL_FreeSurface(color_surface);
-
-  m_rect_textures.insert({ key, color_texture }); // Cache texture
-  return color_texture;
-}
-
 // Load fonts
 
 TTF_Font*
-TextureManager::load_font(const std::string& path, int size)
+TextureManager::load_font(const std::string& path, const int& size)
 {
-  TTF_Font* font = TTF_OpenFont(FileSystem::join("data", path).c_str(), size); // Load the default font
+  TTF_Font* font = TTF_OpenFont(FileSystem::join("data", path).c_str(), size); // Load the font
   if (font == NULL)
     Log::fatal("Couldn't load TTF font '" + path + "': ", TTF_GetError()); // Log font loading error
   return font;

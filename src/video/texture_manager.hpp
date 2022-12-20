@@ -36,7 +36,6 @@ private:
 
   std::map<std::string, SDL_Texture*> m_image_textures;
   std::map<std::string, Text> m_text_textures;
-  std::map<std::string, SDL_Texture*> m_rect_textures;
 
 public:
   TextureManager(SDL_Renderer* renderer);
@@ -45,10 +44,9 @@ public:
   // Load textures
   SDL_Texture* load_image(const std::string& path);
   const Text& load_text(TTF_Font* font, const std::string& text, const Color& color);
-  SDL_Texture* load_filled_rect(Sizef size, const Color& color);
 
   // Load fonts
-  TTF_Font* load_font(const std::string& path, int size);
+  TTF_Font* load_font(const std::string& path, const int& size);
 
   // Texture utilities
   Size get_size(SDL_Texture* texture);

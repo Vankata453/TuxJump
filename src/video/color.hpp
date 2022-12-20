@@ -20,11 +20,43 @@
 #include <SDL2/SDL.h>
 
 #include <string>
+#include <vector>
 
-class Color : public SDL_Color
+#include "util/log.hpp"
+
+class Color final
 {
 public:
-  std::string to_string() const { return std::to_string(r) + " " + std::to_string(g) + " " + std::to_string(b); }
+  int r, g, b, a;
+
+public:
+  static Color from_array(const std::vector<int>& arr)
+  {
+    if (arr.size() < 4)
+    {
+      Log::fatal("Cannot create color from an array with less than 4 values.");
+    }
+    return { arr[0], arr[1], arr[2], arr[3] };
+  }
+
+public:
+  Color(const int& r_, const int& g_, const int& b_, int a_ = 255) :
+    r(r_),
+    g(g_),
+    b(b_),
+    a(a_)
+  {}
+
+  std::string to_string() const
+  {
+    return std::to_string(r) + " " + std::to_string(g) + " " +
+           std::to_string(b) + " " + std::to_string(a);
+  }
+  SDL_Color to_sdl() const
+  {
+    return { static_cast<uint8_t>(r), static_cast<uint8_t>(g),
+             static_cast<uint8_t>(b), static_cast<uint8_t>(a) };
+  }
 };
 
 #endif
