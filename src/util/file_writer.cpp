@@ -20,7 +20,7 @@
 #include "util/log.hpp"
 
 // File writer, using a file as a base.
-FileWriter::FileWriter(const std::string path, const char separator) :
+FileWriter::FileWriter(const std::string& path, char separator) :
   m_file(path),
   m_stream(),
   m_separator(separator),
@@ -31,7 +31,7 @@ FileWriter::FileWriter(const std::string path, const char separator) :
 }
 
 // File writer, using a category in an existing file writer as a base.
-FileWriter::FileWriter(FileWriter& base, const std::string category) :
+FileWriter::FileWriter(FileWriter& base, const std::string& category) :
   m_file(base.get_file()),
   m_stream(),
   m_separator(base.m_separator),
@@ -50,7 +50,7 @@ FileWriter::~FileWriter()
 
 
 FileWriter
-FileWriter::for_subcategory(const std::string category)
+FileWriter::for_subcategory(const std::string& category)
 {
   if (category.empty()) Log::fatal("No writer sub-category provided.");
 

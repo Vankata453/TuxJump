@@ -34,7 +34,7 @@ CollisionManager::add_object(CollisionObject* obj)
 }
 
 void
-CollisionManager::remove_object(const int id)
+CollisionManager::remove_object(const int& id)
 {
   m_col_objects.erase(std::remove_if(m_col_objects.begin(), m_col_objects.end(),
                         [id](CollisionObject* obj) {

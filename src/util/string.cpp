@@ -17,7 +17,7 @@
 #include "util/string.hpp"
 
 bool
-StringUtil::starts_with(const std::string& str, std::string prefix)
+StringUtil::starts_with(const std::string& str, const std::string& prefix)
 {
   return str.rfind(prefix, 0) == 0;
 }

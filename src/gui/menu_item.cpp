@@ -20,7 +20,7 @@
 #include "gui/menu_manager.hpp"
 
 // Item to execute a callback.
-MenuItem::MenuItem(const std::string text, const MenuItem::Callback& callback) :
+MenuItem::MenuItem(const std::string& text, const MenuItem::Callback& callback) :
   m_text(text),
   m_callback(callback),
   m_id(-1)
@@ -28,7 +28,7 @@ MenuItem::MenuItem(const std::string text, const MenuItem::Callback& callback) :
 }
 
 // Item to invoke "menu_action()" on its menu.
-MenuItem::MenuItem(const std::string text, int id) :
+MenuItem::MenuItem(const std::string& text, int id) :
   m_text(text),
   m_callback([this]() { MenuManager::current()->current_menu()->menu_action(*this); }),
   m_id(id)
@@ -40,7 +40,7 @@ MenuItem::~MenuItem()
 }
 
 void
-MenuItem::draw(RenderContext& context, int x, int y, bool selected)
+MenuItem::draw(RenderContext& context, const int& x, const int& y, bool selected)
 {
   const auto text_rect = context.draw_text(Resources::Fonts::DEFAULT, m_text, x, y,
                                            ALIGN_CENTER, Resources::Colors::WHITE);

@@ -36,24 +36,24 @@ private:
   const std::string m_category;
 
 public:
-  FileWriter(const std::string path, const char separator = ' ');
-  FileWriter(FileWriter& base, const std::string category);
+  FileWriter(const std::string& path, char separator = ' ');
+  FileWriter(FileWriter& base, const std::string& category);
   ~FileWriter();
 
-  FileWriter for_subcategory(const std::string category);
+  FileWriter for_subcategory(const std::string& category);
 
   // Macro to help write key.
   #define WRITER_WRITE_KEY                                                                            \
     m_stream << (m_category.empty() ? "" : m_category + FILE_CATEGORY_SEPARATOR) << key << m_separator
 
   template<typename T>
-  void write(const std::string key, const T& val)
+  void write(const std::string& key, const T& val)
   {
     WRITER_WRITE_KEY << val << std::endl;
   }
 
   template<typename T>
-  void write_array(const std::string key, const std::vector<T>& arr, char delimiter = ',')
+  void write_array(const std::string& key, const std::vector<T>& arr, char delimiter = ',')
   {
     WRITER_WRITE_KEY;
 

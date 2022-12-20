@@ -41,7 +41,7 @@ OptionsMenu::refresh()
 
 
 void
-OptionsMenu::add_option(const std::string name, bool& var)
+OptionsMenu::add_option(const std::string& name, bool& var)
 {
   add_item(name + ": " + (var ? "ON" : "OFF"),
     [this, &var]() {

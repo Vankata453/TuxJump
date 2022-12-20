@@ -21,7 +21,7 @@
 
 namespace StringUtil
 {
-  bool starts_with(const std::string& str, std::string prefix);
+  bool starts_with(const std::string& str, const std::string& prefix);
 }
 
 #endif

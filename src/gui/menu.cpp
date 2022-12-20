@@ -31,7 +31,7 @@ Menu::~Menu()
 void
 Menu::draw(RenderContext& context)
 {
-  const Position menu_pos = get_pos(context.get_size());
+  const Position menu_pos = get_pos();
   for (int i = 0; i < static_cast<int>(m_items.size()); i++)
   {
     m_items[i]->draw(context, menu_pos.x, menu_pos.y + 40 * (i + 1), i == m_selected_item);

@@ -26,7 +26,7 @@
 class Log
 {
 public:
-  static void warning(std::string text)
+  static void warning(const std::string& text)
   {
     std::cout << GAME_TITLE << ": Warning: " << text << std::endl;
   }

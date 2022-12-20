@@ -38,11 +38,11 @@ private:
 
 public:
   // Allow creation of two types of items: ones that use a callback, and others that invoke "menu_action()".
-  MenuItem(const std::string text, const Callback& callback);
-  MenuItem(const std::string text, int id);
+  MenuItem(const std::string& text, const Callback& callback);
+  MenuItem(const std::string& text, int id);
   ~MenuItem();
 
-  void draw(RenderContext& context, int x, int y, bool selected);
+  void draw(RenderContext& context, const int& x, const int& y, bool selected);
   void process_action(const ControlAction& action);
 
   // Get properties

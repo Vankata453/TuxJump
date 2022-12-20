@@ -27,7 +27,7 @@ protected:
   bool m_collides;
 
 public:
-  CollisionEntity(const Rectf rect);
+  CollisionEntity(const Rectf& rect);
   ~CollisionEntity();
 
   virtual void draw(RenderContext& context);

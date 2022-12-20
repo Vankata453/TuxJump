@@ -22,7 +22,7 @@
 #include "util/log.hpp"
 
 // Initalize a PhysicsFS error.
-FileSystem::PhysfsError::PhysfsError(const std::string message, const std::string action) throw() :
+FileSystem::PhysfsError::PhysfsError(const std::string& message, const std::string& action) throw() :
   m_message()
 {
   const PHYSFS_ErrorCode code = PHYSFS_getLastErrorCode();
@@ -95,8 +95,9 @@ FileSystem::read_file(const std::string& file)
   if (PHYSFS_readBytes(handle, buffer, length) <= 0)
     throw PhysfsError("Cannot read any data from file '" + file + "'", "readBytes");
 
+  const std::string str = buffer;
   PHYSFS_close(handle);
-  return buffer;
+  return str;
 }
 
 // Write to a specified file.
@@ -116,7 +117,7 @@ FileSystem::write_file(const std::string& file, const std::string& data)
 
 // Join two parts of a path together.
 std::string
-FileSystem::join(const std::string lhs, const std::string rhs)
+FileSystem::join(const std::string& lhs, const std::string& rhs)
 {
   return lhs + "/" + rhs;
 }

@@ -29,7 +29,7 @@ namespace FileSystem
     std::string m_message;
 
   public:
-    PhysfsError(const std::string message, const std::string action) throw();
+    PhysfsError(const std::string& message, const std::string& action) throw();
 
     const char* what() const throw() { return m_message.c_str(); }
   };
@@ -43,7 +43,7 @@ namespace FileSystem
   std::string read_file(const std::string& file);
   void write_file(const std::string& file, const std::string& data);
 
-  std::string join(const std::string lhs, const std::string rhs);
+  std::string join(const std::string& lhs, const std::string& rhs);
 }
 
 #endif

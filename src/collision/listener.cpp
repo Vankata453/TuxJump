@@ -20,8 +20,8 @@
 #include "collision/type.hpp"
 #include "level/level.hpp"
 
-CollisionListener::CollisionListener(const Rectf rect) :
-  CollisionEntity(std::move(rect)),
+CollisionListener::CollisionListener(const Rectf& rect) :
+  CollisionEntity(rect),
   m_col_manager(*CollisionManager::current()),
   m_level(*Level::current())
 {

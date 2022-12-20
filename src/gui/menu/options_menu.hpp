@@ -27,7 +27,7 @@ public:
   void refresh() override;
 
 private:
-  void add_option(const std::string name, bool& var);
+  void add_option(const std::string& name, bool& var);
 
 private:
   OptionsMenu(const OptionsMenu&) = delete;

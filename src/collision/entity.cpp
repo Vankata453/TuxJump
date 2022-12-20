@@ -19,8 +19,8 @@
 #include "game/config.hpp"
 #include "game/resources.hpp"
 
-CollisionEntity::CollisionEntity(const Rectf rect) :
-  m_rect(std::move(rect)),
+CollisionEntity::CollisionEntity(const Rectf& rect) :
+  m_rect(rect),
   m_collides(false)
 {
 }

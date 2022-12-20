@@ -27,7 +27,7 @@ public:
   int x;
   int y;
 
-  Position(int x_ = 0, int y_ = 0) : x(x_), y(y_) {}
+  Position(const int& x_ = 0, const int& y_ = 0) : x(x_), y(y_) {}
   ~Position() {}
 
   virtual std::string to_string() const { return x + " " + y; }
@@ -39,7 +39,7 @@ public:
   float x;
   float y;
 
-  Positionf(float x_ = 0.0f, float y_ = 0.0f) : x(x_), y(y_) {}
+  Positionf(const float& x_ = 0.0f, const float& y_ = 0.0f) : x(x_), y(y_) {}
   ~Positionf() {}
 
   virtual std::string to_string() const { return std::to_string(x) + " " + std::to_string(y); }
@@ -52,7 +52,7 @@ public:
   int w;
   int h;
 
-  Size(int w_ = 0, int h_ = 0) : w(w_), h(h_) {}
+  Size(const int& w_ = 0, const int& h_ = 0) : w(w_), h(h_) {}
   ~Size() {}
 
   virtual std::string to_string() const { return w + " " + h; }
@@ -64,7 +64,7 @@ public:
   float w;
   float h;
 
-  Sizef(float w_ = 0.0f, float h_ = 0.0f) : w(w_), h(h_) {}
+  Sizef(const float& w_ = 0.0f, const float& h_ = 0.0f) : w(w_), h(h_) {}
   ~Sizef() {}
 
   virtual std::string to_string() const { return std::to_string(w) + " " + std::to_string(h); }
@@ -75,7 +75,7 @@ class Rect final : public Position,
                    public Size
 {
 public:
-  Rect(int x_ = 0, int y_ = 0, int w_ = 0, int h_ = 0) : Position(x_, y_), Size(w_, h_) {}
+  Rect(const int& x_ = 0, const int& y_ = 0, const int& w_ = 0, const int& h_ = 0) : Position(x_, y_), Size(w_, h_) {}
   ~Rect() {}
 
   virtual std::string to_string() const override { return Position::to_string() + " " + Size::to_string(); }
@@ -86,7 +86,7 @@ class Rectf final : public Positionf,
                     public Sizef
 {
 public:
-  Rectf(float x_ = 0.0f, float y_ = 0.0f, float w_ = 0.0f, float h_ = 0.0f) : Positionf(x_, y_), Sizef(w_, h_) {}
+  Rectf(const float& x_ = 0.0f, const float& y_ = 0.0f, const float& w_ = 0.0f, const float& h_ = 0.0f) : Positionf(x_, y_), Sizef(w_, h_) {}
   ~Rectf() {}
 
   virtual std::string to_string() const override { return Positionf::to_string() + " " + Sizef::to_string(); }

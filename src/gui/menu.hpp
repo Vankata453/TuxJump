@@ -24,6 +24,7 @@
 #include <vector>
 
 #include "control/control.hpp"
+#include "game/global.hpp"
 #include "gui/menu_item.hpp"
 #include "video/render_context.hpp"
 
@@ -52,7 +53,7 @@ public:
   }
 
   // Get dynamic properties (override to modify)
-  virtual Position get_pos(Size context_size) { return { context_size.w / 2, context_size.h / 2 - context_size.h / 4 }; }
+  virtual Position get_pos() { return { SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - SCREEN_HEIGHT / 4 }; }
 
 protected:
   // Menu actions

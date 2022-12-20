@@ -35,7 +35,7 @@ public:
   ~CollisionManager();
 
   void add_object(CollisionObject* obj);
-  void remove_object(const int id);
+  void remove_object(const int& id);
 
   // Get properties
   const CollisionObjects& get_objects() { return m_col_objects; }

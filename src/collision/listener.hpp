@@ -31,7 +31,7 @@ private:
   Level& m_level;
 
 public:
-  CollisionListener(const Rectf rect);
+  CollisionListener(const Rectf& rect);
   ~CollisionListener();
 
   virtual void update(const float& x_offset, const float& y_offset);
