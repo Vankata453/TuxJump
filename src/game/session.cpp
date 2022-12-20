@@ -38,6 +38,7 @@ void
 GameSession::draw(RenderContext& context)
 {
   // Draw level background and interactive layers.
+  m_level->draw_background(context);
   m_level->draw(context, TileMap::LAYER_BACKGROUND, m_progress, 0.0f);
   m_level->draw(context, TileMap::LAYER_INTERACTIVE, m_progress, 0.0f);
 

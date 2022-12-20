@@ -32,11 +32,11 @@ public:
 public:
   static Color from_array(const std::vector<int>& arr)
   {
-    if (arr.size() < 4)
+    if (arr.size() < 3)
     {
-      Log::fatal("Cannot create color from an array with less than 4 values.");
+      Log::fatal("Cannot create color from an array with less than 3 values.");
     }
-    return { arr[0], arr[1], arr[2], arr[3] };
+    return { arr[0], arr[1], arr[2], (arr.size() > 3 ? arr[3] : 255) };
   }
 
 public:

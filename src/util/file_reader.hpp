@@ -21,6 +21,8 @@
 #include <vector>
 #include <map>
 
+class Color;
+
 // A class to allow reading from a key-entry structured file.
 class FileReader final
 {
@@ -32,21 +34,24 @@ private:
   ReaderEntries m_entries;
 
 public:
-  FileReader(const std::string path, const char separator = ' ');
-  FileReader(const FileReader& base, const std::string category);
+  FileReader(const std::string& path, char separator = ' ');
+  FileReader(const FileReader& base, const std::string& category);
   ~FileReader();
 
-  FileReader for_subcategory(const std::string category);
+  FileReader for_subcategory(const std::string& category);
 
   const std::string& get_string(const std::string& key) const;
 
-  bool get(const std::string key, std::string& var);
-  bool get(const std::string key, int& var);
-  bool get(const std::string key, float& var);
-  bool get(const std::string key, bool& var);
+  bool get(const std::string& key, std::string& var);
+  bool get(const std::string& key, int& var);
+  bool get(const std::string& key, float& var);
+  bool get(const std::string& key, bool& var);
 
-  std::vector<std::string> read_array(const std::string key, char delimiter = ',') const;
-  std::vector<int> read_int_array(const std::string key, char delimiter = ',') const;
+  std::vector<std::string> read_array(const std::string& key, char delimiter = ',') const;
+  std::vector<int> read_int_array(const std::string& key, char delimiter = ',') const;
+
+  // Get additional objects
+  bool get(const std::string& key, Color& var);
 
   // Get properties
   const std::string& get_file() const { return m_file; }

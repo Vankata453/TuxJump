@@ -20,9 +20,10 @@
 #include "util/file_system.hpp"
 #include "util/log.hpp"
 #include "util/string.hpp"
+#include "video/color.hpp"
 
 // File reader, using a file as a base.
-FileReader::FileReader(const std::string path, const char separator) :
+FileReader::FileReader(const std::string& path, char separator) :
   m_file(path),
   m_entries()
 {
@@ -56,7 +57,7 @@ FileReader::FileReader(const std::string path, const char separator) :
 }
 
 // File reader, using a category in an existing file reader as a base.
-FileReader::FileReader(const FileReader& base, const std::string category) :
+FileReader::FileReader(const FileReader& base, const std::string& category) :
   m_file(base.get_file()),
   m_entries()
 {
@@ -74,7 +75,7 @@ FileReader::~FileReader()
 
 
 FileReader
-FileReader::for_subcategory(const std::string category)
+FileReader::for_subcategory(const std::string& category)
 {
   if (category.empty()) Log::fatal("No reader sub-category provided.");
 
@@ -95,7 +96,7 @@ FileReader::get_string(const std::string& key) const
 
 
 bool
-FileReader::get(const std::string key, std::string& var)
+FileReader::get(const std::string& key, std::string& var)
 {
   try
   {
@@ -114,7 +115,7 @@ FileReader::get(const std::string key, std::string& var)
   if (!get(key, val)) return false;
 
 bool
-FileReader::get(const std::string key, int& var)
+FileReader::get(const std::string& key, int& var)
 {
   READER_GET_STRING_VALUE;
   var = std::stoi(val);
@@ -122,7 +123,7 @@ FileReader::get(const std::string key, int& var)
 }
 
 bool
-FileReader::get(const std::string key, float& var)
+FileReader::get(const std::string& key, float& var)
 {
   READER_GET_STRING_VALUE;
   var = std::stof(val);
@@ -130,7 +131,7 @@ FileReader::get(const std::string key, float& var)
 }
 
 bool
-FileReader::get(const std::string key, bool& var)
+FileReader::get(const std::string& key, bool& var)
 {
   READER_GET_STRING_VALUE;
   var = (val == "1");
@@ -139,7 +140,7 @@ FileReader::get(const std::string key, bool& var)
 
 
 std::vector<std::string>
-FileReader::read_array(const std::string key, char delimiter) const
+FileReader::read_array(const std::string& key, char delimiter) const
 {
   std::string contents = get_string(key);
   std::vector<std::string> result;
@@ -161,7 +162,7 @@ FileReader::read_array(const std::string key, char delimiter) const
 }
 
 std::vector<int>
-FileReader::read_int_array(const std::string key, char delimiter) const
+FileReader::read_int_array(const std::string& key, char delimiter) const
 {
   const std::vector<std::string> string_data = read_array(key, delimiter);
   std::vector<int> result;
@@ -170,4 +171,20 @@ FileReader::read_int_array(const std::string key, char delimiter) const
     result.push_back(std::stoi(str));
 
   return result;
+}
+
+// Get additional objects
+
+bool
+FileReader::get(const std::string& key, Color& var)
+{
+  try
+  {
+    var = Color::from_array(read_int_array("background_fill"));
+  }
+  catch (...)
+  {
+    return false;
+  }
+  return true;
 }

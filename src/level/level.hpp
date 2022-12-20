@@ -25,6 +25,7 @@
 
 #include "level/tilemap.hpp"
 #include "level/tileset.hpp"
+#include "video/color.hpp"
 
 class FileReader;
 
@@ -38,6 +39,8 @@ public:
   public:
     int width;
     float spawn_height;
+    std::string background;
+    Color background_fill;
 
   public:
     Data();
@@ -51,12 +54,16 @@ private:
   std::unique_ptr<TileSet> m_tileset;
   std::vector<std::unique_ptr<TileMap>> m_tilemaps;
 
+  SDL_Texture* m_background;
+
 public:
-  Level(const std::string file_path);
+  Level(const std::string& file_path);
   ~Level();
 
   void draw(RenderContext& context, TileMap::Layer layer,
             const float& x_offset, const float& y_offset) const;
+  void draw_background(RenderContext& context) const;
+
   CollisionType collision(const Rectf& target, const float& x_offset,
                           const float& y_offset) const;
 

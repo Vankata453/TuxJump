@@ -20,10 +20,13 @@
 
 #include "util/file_reader.hpp"
 #include "util/file_system.hpp"
+#include "video/render_context.hpp"
 
 Level::Data::Data() :
   width(5),
-  spawn_height(-1.0f)
+  spawn_height(-1.0f),
+  background(),
+  background_fill(254, 250, 231)
 {
 }
 
@@ -32,13 +35,16 @@ Level::Data::read(FileReader& reader)
 {
   reader.get("width", width);
   reader.get("spawn_height", spawn_height);
+  reader.get("background", background);
+  reader.get("background_fill", background_fill);
 }
 
 
-Level::Level(const std::string file_path) :
+Level::Level(const std::string& file_path) :
   m_data(),
   m_tileset(),
-  m_tilemaps()
+  m_tilemaps(),
+  m_background()
 {
   FileReader reader(file_path);
 
@@ -75,6 +81,10 @@ Level::Level(const std::string file_path) :
     [](const auto& lhs, const auto& rhs) {
       return lhs->get_layer() < rhs->get_layer();
     });
+
+  // Initialize the level background, if available.
+  if (!m_data.background.empty())
+    m_background = TextureManager::current()->load_image(FileSystem::join("images/backgrounds", m_data.background));
 }
 
 Level::~Level()
@@ -93,6 +103,18 @@ Level::draw(RenderContext& context, TileMap::Layer layer,
       tilemap->draw(context, x_offset, y_offset, m_data.width);
   }
 }
+
+void
+Level::draw_background(RenderContext& context) const
+{
+  // Draw background fill.
+  context.draw_filled_rect(0, 0, context.get_width(), context.get_height(), m_data.background_fill);
+
+  // Draw level background, if available.
+  if (m_background)
+    context.draw_texture(m_background, 0, 0, context.get_width(), context.get_height());
+}
+
 
 CollisionType
 Level::collision(const Rectf& target, const float& x_offset,
