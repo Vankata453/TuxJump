@@ -47,24 +47,25 @@ public:
   SDL_FRect create_rect(const float& x, const float& y, const float& w, const float& h) const;
 
   // Draw textures
-  void draw_texture(SDL_Texture* texture, float x, float y, float w, float h);
+  void draw_texture(SDL_Texture* texture, const float& x, const float& y, const float& w, const float& h);
   void draw_texture(SDL_Texture* texture, const Rectf& rect);
 
-  SDL_Texture* draw_image(std::string path, float x, float y, float w, float h);
-  SDL_Texture* draw_image(std::string path, const Rectf& rect);
+  SDL_Texture* draw_image(const std::string& path, const float& x, const float& y, const float& w, const float& h);
+  SDL_Texture* draw_image(const std::string& path, const Rectf& rect);
 
-  Rectf draw_text(TTF_Font* font, std::string text, float x, float y, Alignment alignment, Color& color);
+  Rectf draw_text(TTF_Font* font, const std::string& text, float x, const float& y,
+                  const Alignment& alignment, const Color& color);
 
-  void draw_rect(float x, float y, float w, float h, Color& color);
-  void draw_rect(const Rectf& rect, Color& color);
+  void draw_rect(const float& x, const float& y, const float& w, const float& h, const Color& color);
+  void draw_rect(const Rectf& rect, const Color& color);
 
-  void draw_filled_rect(float x, float y, float w, float h, Color& color);
-  void draw_filled_rect(const Rectf& rect, Color& color);
+  void draw_filled_rect(const float& x, const float& y, const float& w, const float& h, const Color& color);
+  void draw_filled_rect(const Rectf& rect, const Color& color);
 
-  void draw_line(float x1, float y1, float x2, float y2, Color& color);
+  void draw_line(const float& x1, const float& y1, const float& x2, const float& y2, const Color& color);
 
   // Get dynamic texture properties (without drawing)
-  Sizef get_text_size(TTF_Font* font, std::string text);
+  Sizef get_text_size(TTF_Font* font, const std::string& text);
 
   // Get properties
   const int& get_width() const { return m_width; }
