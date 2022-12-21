@@ -1,4 +1,4 @@
-tileset default.tjtm
+tileset desert.tjtm
 width 15
 spawn_height 100
 background desert.png
