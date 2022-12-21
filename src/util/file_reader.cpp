@@ -180,7 +180,7 @@ FileReader::get(const std::string& key, Color& var)
 {
   try
   {
-    var = Color::from_array(read_int_array("background_fill"));
+    var = Color::from_array(read_int_array(key));
   }
   catch (...)
   {

@@ -21,5 +21,5 @@ int main(int argc, char* args[])
   // Initialize GameManager and run the main loop.
   GameManager().main_loop();
 
-	return 0;
+  return 0;
 }
