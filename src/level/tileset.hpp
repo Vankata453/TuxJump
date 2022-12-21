@@ -20,10 +20,9 @@
 #include <string>
 #include <map>
 
-class Positionf;
-class RenderContext;
+#include "video/render_context.hpp"
 
-// A class, which points tile IDs to their respective images.
+// A class, which points tile IDs to their respective textures.
 // Used to allow drawing a tile's texture on-screen.
 class TileSet final
 {
@@ -33,7 +32,7 @@ private:
 
 private:
   const std::string m_name;
-  std::map<int, std::string> m_tile_files;
+  std::map<int, SDL_Texture*> m_tile_textures;
 
 public:
   TileSet(const std::string& file);

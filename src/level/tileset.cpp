@@ -23,19 +23,24 @@
 #include "util/file_reader.hpp"
 #include "util/file_system.hpp"
 #include "util/log.hpp"
-#include "video/render_context.hpp"
 
 const std::string TileSet::s_tiles_folder = "images/tiles";
 const std::string TileSet::s_tilesets_folder = "images/tilesets";
 
 TileSet::TileSet(const std::string& file) :
   m_name(name_from_file(file)),
-  m_tile_files()
+  m_tile_textures()
 {
   FileReader reader(FileSystem::join(s_tilesets_folder, file));
 
+  // Load each tile's texture.
+  TextureManager* texture_manager = TextureManager::current();
+  const std::string folder = get_tiles_folder();
   for (auto& tile_entry : reader.get_entries())
-    m_tile_files[std::stoi(tile_entry.first)] = tile_entry.second;
+  {
+    SDL_Texture* tile_texture = texture_manager->load_image(FileSystem::join(folder, tile_entry.second));
+    m_tile_textures[std::stoi(tile_entry.first)] = tile_texture;
+  }
 }
 
 TileSet::~TileSet()
@@ -45,13 +50,13 @@ TileSet::~TileSet()
 void
 TileSet::draw_tile(RenderContext& context, const int& id, const Positionf& pos) const
 {
-  auto it = m_tile_files.find(id);
-  if (it == m_tile_files.end())
+  auto it = m_tile_textures.find(id);
+  if (it == m_tile_textures.end())
     Log::fatal("No tile with ID " + std::to_string(id));
 
   const Rectf rect(TILE_WIDTH * pos.x, TILE_WIDTH * pos.y, TILE_WIDTH, TILE_WIDTH);
 
-  context.draw_image(FileSystem::join(get_tiles_folder(), it->second), rect);
+  context.draw_texture(it->second, rect);
   if (CONFIG->show_col_rects) // Draw collision rect, if enabled.
     context.draw_rect(rect, Resources::Colors::RED);
 }
