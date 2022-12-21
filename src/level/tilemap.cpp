@@ -34,7 +34,7 @@ TileMap::~TileMap()
 
 
 void
-TileMap::draw(RenderContext& context, const float& x_offset,
+TileMap::draw(const RenderContext& context, const float& x_offset,
               const float& y_offset, const int& width) const
 {
   for (int i = 0; i < static_cast<int>(m_tiles.size()); i++)

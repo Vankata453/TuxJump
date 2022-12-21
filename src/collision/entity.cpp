@@ -30,7 +30,7 @@ CollisionEntity::~CollisionEntity()
 }
 
 void
-CollisionEntity::draw(RenderContext& context)
+CollisionEntity::draw(const RenderContext& context)
 {
   // Draw collision rect. Use a different color when colliding.
   if (CONFIG->show_col_rects)

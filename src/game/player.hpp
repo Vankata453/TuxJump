@@ -39,7 +39,7 @@ public:
   Player();
   ~Player();
 
-  void draw(RenderContext& context) override;
+  void draw(const RenderContext& context) override;
   void process_action(ControlAction action);
 
   // Player actions

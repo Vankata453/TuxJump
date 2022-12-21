@@ -29,7 +29,7 @@ MenuManager::~MenuManager()
 }
 
 void
-MenuManager::draw(RenderContext& context)
+MenuManager::draw(const RenderContext& context)
 {
   if (!is_active()) return;
 
@@ -37,7 +37,7 @@ MenuManager::draw(RenderContext& context)
 }
 
 void
-MenuManager::process_event(SDL_Event& ev)
+MenuManager::process_event(const SDL_Event& ev)
 {
   if (!is_active()) return;
 

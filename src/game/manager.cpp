@@ -149,7 +149,7 @@ GameManager::main_loop()
 }
 
 void
-GameManager::draw(RenderContext& context)
+GameManager::draw(const RenderContext& context)
 {
   update();
   m_game_mode->draw(context);

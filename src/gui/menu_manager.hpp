@@ -34,8 +34,8 @@ public:
   MenuManager();
   ~MenuManager() override;
 
-  void draw(RenderContext& context) override;
-  void process_event(SDL_Event& ev) override;
+  void draw(const RenderContext& context) override;
+  void process_event(const SDL_Event& ev) override;
 
   // Menu management
   void push_menu(std::unique_ptr<Menu> menu);

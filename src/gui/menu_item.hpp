@@ -42,7 +42,7 @@ public:
   MenuItem(const std::string& text, int id);
   ~MenuItem();
 
-  void draw(RenderContext& context, const int& x, const int& y, bool selected);
+  void draw(const RenderContext& context, const int& x, const int& y, bool selected);
   void process_action(const ControlAction& action);
 
   // Get properties

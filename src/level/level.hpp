@@ -60,9 +60,9 @@ public:
   Level(const std::string& file_path);
   ~Level();
 
-  void draw(RenderContext& context, TileMap::Layer layer,
+  void draw(const RenderContext& context, TileMap::Layer layer,
             const float& x_offset, const float& y_offset) const;
-  void draw_background(RenderContext& context) const;
+  void draw_background(const RenderContext& context) const;
 
   CollisionType collision(const Rectf& target, const float& x_offset,
                           const float& y_offset) const;

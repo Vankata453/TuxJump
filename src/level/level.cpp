@@ -93,7 +93,7 @@ Level::~Level()
 
 
 void
-Level::draw(RenderContext& context, TileMap::Layer layer,
+Level::draw(const RenderContext& context, TileMap::Layer layer,
             const float& x_offset, const float& y_offset) const
 {
   // Draw a specified tilemap layer type.
@@ -105,7 +105,7 @@ Level::draw(RenderContext& context, TileMap::Layer layer,
 }
 
 void
-Level::draw_background(RenderContext& context) const
+Level::draw_background(const RenderContext& context) const
 {
   // Draw background fill.
   context.draw_filled_rect(0, 0, context.get_width(), context.get_height(), m_data.background_fill);

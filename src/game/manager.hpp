@@ -76,7 +76,7 @@ public:
   void quit_game() { m_quit = true; }
 
 private:
-  void draw(RenderContext& context);
+  void draw(const RenderContext& context);
   void process_event();
 
   void update();

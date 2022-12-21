@@ -46,7 +46,7 @@ public:
   TileMap(int layer, std::vector<int> tiles, const TileSet* tileset);
   ~TileMap();
 
-  void draw(RenderContext& context, const float& x_offset,
+  void draw(const RenderContext& context, const float& x_offset,
             const float& y_offset, const int& width) const;
 
   Positionf get_tile_pos(const int& index, const float& x_offset,

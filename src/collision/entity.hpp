@@ -30,7 +30,7 @@ public:
   CollisionEntity(const Rectf& rect);
   ~CollisionEntity();
 
-  virtual void draw(RenderContext& context);
+  virtual void draw(const RenderContext& context);
 
   // Get properties
   const Rectf& get_rect() const { return m_rect; }

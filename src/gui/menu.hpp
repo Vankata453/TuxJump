@@ -40,8 +40,8 @@ public:
 
   virtual void refresh() {}
 
-  virtual void draw(RenderContext& context);
-  virtual void process_event(SDL_Event& ev);
+  virtual void draw(const RenderContext& context);
+  virtual void process_event(const SDL_Event& ev);
 
   virtual void menu_action(MenuItem& item) {}
 

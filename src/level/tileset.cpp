@@ -48,7 +48,8 @@ TileSet::~TileSet()
 }
 
 void
-TileSet::draw_tile(RenderContext& context, const int& id, const Positionf& pos) const
+TileSet::draw_tile(const RenderContext& context, const int& id,
+                   const Positionf& pos) const
 {
   auto it = m_tile_textures.find(id);
   if (it == m_tile_textures.end())

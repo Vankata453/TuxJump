@@ -29,7 +29,7 @@ Menu::~Menu()
 }
 
 void
-Menu::draw(RenderContext& context)
+Menu::draw(const RenderContext& context)
 {
   const Position menu_pos = get_pos();
   for (int i = 0; i < static_cast<int>(m_items.size()); i++)
@@ -39,7 +39,7 @@ Menu::draw(RenderContext& context)
 }
 
 void
-Menu::process_event(SDL_Event& ev)
+Menu::process_event(const SDL_Event& ev)
 {
   if (m_items.empty()) return;
 

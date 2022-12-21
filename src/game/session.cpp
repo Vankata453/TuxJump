@@ -35,7 +35,7 @@ GameSession::~GameSession()
 }
 
 void
-GameSession::draw(RenderContext& context)
+GameSession::draw(const RenderContext& context)
 {
   // Draw level background and interactive layers.
   m_level->draw_background(context);
@@ -52,7 +52,7 @@ GameSession::draw(RenderContext& context)
 }
 
 void
-GameSession::process_event(SDL_Event& ev)
+GameSession::process_event(const SDL_Event& ev)
 {
   switch (ev.type)
   {

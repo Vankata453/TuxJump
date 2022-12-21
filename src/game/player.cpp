@@ -48,7 +48,7 @@ Player::~Player()
 }
 
 void
-Player::draw(RenderContext& context)
+Player::draw(const RenderContext& context)
 {
   context.draw_image(s_image_file, m_rect);
 

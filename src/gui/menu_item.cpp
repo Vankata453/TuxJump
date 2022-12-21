@@ -40,7 +40,7 @@ MenuItem::~MenuItem()
 }
 
 void
-MenuItem::draw(RenderContext& context, const int& x, const int& y, bool selected)
+MenuItem::draw(const RenderContext& context, const int& x, const int& y, bool selected)
 {
   const auto text_rect = context.draw_text(Resources::Fonts::DEFAULT, m_text, x, y,
                                            ALIGN_CENTER, Resources::Colors::WHITE);

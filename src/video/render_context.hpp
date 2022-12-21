@@ -37,29 +37,29 @@ public:
   void render_present();
 
   // General functions
-  void reset_color();
+  void reset_color() const;
   SDL_FRect create_rect(const float& x, const float& y, const float& w, const float& h) const;
 
   // Draw textures
-  void draw_texture(SDL_Texture* texture, const float& x, const float& y, const float& w, const float& h);
-  void draw_texture(SDL_Texture* texture, const Rectf& rect);
+  void draw_texture(SDL_Texture* texture, const float& x, const float& y, const float& w, const float& h) const;
+  void draw_texture(SDL_Texture* texture, const Rectf& rect) const;
 
-  SDL_Texture* draw_image(const std::string& path, const float& x, const float& y, const float& w, const float& h);
-  SDL_Texture* draw_image(const std::string& path, const Rectf& rect);
+  SDL_Texture* draw_image(const std::string& path, const float& x, const float& y, const float& w, const float& h) const;
+  SDL_Texture* draw_image(const std::string& path, const Rectf& rect) const;
 
   Rectf draw_text(TTF_Font* font, const std::string& text, float x, const float& y,
-                  const Alignment& alignment, const Color& color);
+                  const Alignment& alignment, const Color& color) const;
 
-  void draw_rect(const float& x, const float& y, const float& w, const float& h, const Color& color);
-  void draw_rect(const Rectf& rect, const Color& color);
+  void draw_rect(const float& x, const float& y, const float& w, const float& h, const Color& color) const;
+  void draw_rect(const Rectf& rect, const Color& color) const;
 
-  void draw_filled_rect(const float& x, const float& y, const float& w, const float& h, const Color& color);
-  void draw_filled_rect(const Rectf& rect, const Color& color);
+  void draw_filled_rect(const float& x, const float& y, const float& w, const float& h, const Color& color) const;
+  void draw_filled_rect(const Rectf& rect, const Color& color) const;
 
-  void draw_line(const float& x1, const float& y1, const float& x2, const float& y2, const Color& color);
+  void draw_line(const float& x1, const float& y1, const float& x2, const float& y2, const Color& color) const;
 
   // Get dynamic texture properties (without drawing)
-  Sizef get_text_size(TTF_Font* font, const std::string& text);
+  Sizef get_text_size(TTF_Font* font, const std::string& text) const;
 
   // Get properties
   const int& get_width() const;

@@ -25,8 +25,8 @@ public:
   GameMode() {}
   virtual ~GameMode() = default;
 
-  virtual void draw(RenderContext& context) {}
-  virtual void process_event(SDL_Event& ev) {}
+  virtual void draw(const RenderContext& context) {}
+  virtual void process_event(const SDL_Event& ev) {}
 
 private:
   GameMode(const GameMode&) = delete;

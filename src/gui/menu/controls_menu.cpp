@@ -38,7 +38,7 @@ ControlsMenu::refresh()
 }
 
 void
-ControlsMenu::draw(RenderContext& context)
+ControlsMenu::draw(const RenderContext& context)
 {
   if (m_modified_control)
   {
@@ -56,7 +56,7 @@ ControlsMenu::draw(RenderContext& context)
 }
 
 void
-ControlsMenu::process_event(SDL_Event& ev)
+ControlsMenu::process_event(const SDL_Event& ev)
 {
   if (m_modified_control)
   {

@@ -60,7 +60,7 @@ RenderContext::render_present()
 // General functions
 
 void
-RenderContext::reset_color()
+RenderContext::reset_color() const
 {
   SDL_SetRenderDrawColor(m_renderer, 0, 0, 0, 1);
 }
@@ -74,20 +74,20 @@ RenderContext::create_rect(const float& x, const float& y, const float& w, const
 // Draw textures
 
 void
-RenderContext::draw_texture(SDL_Texture* texture, const float& x, const float& y, const float& w, const float& h)
+RenderContext::draw_texture(SDL_Texture* texture, const float& x, const float& y, const float& w, const float& h) const
 {
   SDL_FRect render_rect = create_rect(x, y, w, h);
   SDL_RenderCopyF(m_renderer, texture, NULL, &render_rect);
 }
 
 void
-RenderContext::draw_texture(SDL_Texture* texture, const Rectf& rect)
+RenderContext::draw_texture(SDL_Texture* texture, const Rectf& rect) const
 {
   draw_texture(texture, rect.x, rect.y, rect.w, rect.h);
 }
 
 SDL_Texture*
-RenderContext::draw_image(const std::string& path, const float& x, const float& y, const float& w, const float& h)
+RenderContext::draw_image(const std::string& path, const float& x, const float& y, const float& w, const float& h) const
 {
   SDL_Texture* texture = m_texture_manager->load_image(path);
   draw_texture(texture, x, y, w, h);
@@ -95,14 +95,14 @@ RenderContext::draw_image(const std::string& path, const float& x, const float& 
 }
 
 SDL_Texture*
-RenderContext::draw_image(const std::string& path, const Rectf& rect)
+RenderContext::draw_image(const std::string& path, const Rectf& rect) const
 {
   return draw_image(path, rect.x, rect.y, rect.w, rect.h);
 }
 
 Rectf
 RenderContext::draw_text(TTF_Font* font, const std::string& text, float x, const float& y,
-                         const Alignment& alignment, const Color& color)
+                         const Alignment& alignment, const Color& color) const
 {
   const auto texture = m_texture_manager->load_text(font, text, color);
 
@@ -123,7 +123,7 @@ RenderContext::draw_text(TTF_Font* font, const std::string& text, float x, const
 }
 
 void
-RenderContext::draw_rect(const float& x, const float& y, const float& w, const float& h, const Color& color)
+RenderContext::draw_rect(const float& x, const float& y, const float& w, const float& h, const Color& color) const
 {
   SDL_FRect render_rect = create_rect(x, y, w, h);
   SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a); // Temporarily set render draw color
@@ -133,13 +133,13 @@ RenderContext::draw_rect(const float& x, const float& y, const float& w, const f
 }
 
 void
-RenderContext::draw_rect(const Rectf& rect, const Color& color)
+RenderContext::draw_rect(const Rectf& rect, const Color& color) const
 {
   draw_rect(rect.x, rect.y, rect.w, rect.h, color);
 }
 
 void
-RenderContext::draw_filled_rect(const float& x, const float& y, const float& w, const float& h, const Color& color)
+RenderContext::draw_filled_rect(const float& x, const float& y, const float& w, const float& h, const Color& color) const
 {
   SDL_FRect render_rect = create_rect(x, y, w, h);
   SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a); // Temporarily set render draw color
@@ -149,13 +149,13 @@ RenderContext::draw_filled_rect(const float& x, const float& y, const float& w, 
 }
 
 void
-RenderContext::draw_filled_rect(const Rectf& rect, const Color& color)
+RenderContext::draw_filled_rect(const Rectf& rect, const Color& color) const
 {
   draw_filled_rect(rect.x, rect.y, rect.w, rect.h, color);
 }
 
 void
-RenderContext::draw_line(const float& x1, const float& y1, const float& x2, const float& y2, const Color& color)
+RenderContext::draw_line(const float& x1, const float& y1, const float& x2, const float& y2, const Color& color) const
 {
   SDL_SetRenderDrawColor(m_renderer, color.r, color.g, color.b, color.a); // Temporarily set render draw color
   SDL_RenderDrawLine(m_renderer, x1, y1, x2, y2);
@@ -166,7 +166,7 @@ RenderContext::draw_line(const float& x1, const float& y1, const float& x2, cons
 // Get dynamic texture properties (without drawing)
 
 Sizef
-RenderContext::get_text_size(TTF_Font* font, const std::string& text)
+RenderContext::get_text_size(TTF_Font* font, const std::string& text) const
 {
   return m_texture_manager->load_text(font, text, Resources::Colors::WHITE).size; // Return size of text surface
 }
