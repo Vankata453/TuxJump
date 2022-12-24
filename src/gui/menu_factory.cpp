@@ -16,6 +16,7 @@
 
 #include "gui/menu_factory.hpp"
 
+#include "editor/editor.hpp"
 #include "game/manager.hpp"
 #include "gui/menu_manager.hpp"
 #include "gui/menu/controls_menu.hpp"
@@ -33,14 +34,13 @@ MenuFactory::create(MenuType type)
       menu = new Menu;
       menu->add_item("Start Game", []() { GameManager::current()->start_game(); });
       menu->add_item("Options", []() { MenuManager::current()->push_menu(OPTIONS_MENU); });
+      menu->add_item("Level Editor", []() { GameManager::current()->start_editor(); });
       menu->add_item("Quit", []() { GameManager::current()->quit_game(); });
       break;
     }
     case OPTIONS_MENU:
-    {
       menu = new OptionsMenu;
       break;
-    }
     case CONTROLS_MENU:
       menu = new ControlsMenu;
       break;

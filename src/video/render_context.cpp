@@ -74,16 +74,19 @@ RenderContext::create_rect(const float& x, const float& y, const float& w, const
 // Draw textures
 
 void
-RenderContext::draw_texture(SDL_Texture* texture, const float& x, const float& y, const float& w, const float& h) const
+RenderContext::draw_texture(SDL_Texture* texture, const float& x, const float& y, const float& w, const float& h, const float& alpha) const
 {
+  SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
+  SDL_SetTextureAlphaMod(texture, alpha);
+
   SDL_FRect render_rect = create_rect(x, y, w, h);
   SDL_RenderCopyF(m_renderer, texture, NULL, &render_rect);
 }
 
 void
-RenderContext::draw_texture(SDL_Texture* texture, const Rectf& rect) const
+RenderContext::draw_texture(SDL_Texture* texture, const Rectf& rect, const float& alpha) const
 {
-  draw_texture(texture, rect.x, rect.y, rect.w, rect.h);
+  draw_texture(texture, rect.x, rect.y, rect.w, rect.h, alpha);
 }
 
 SDL_Texture*

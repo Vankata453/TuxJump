@@ -14,28 +14,34 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_GAME_CONFIG_HEADER
-#define TUXJUMP_GAME_CONFIG_HEADER
+#ifndef TUXJUMP_EDITOR_EDITOR_HEADER
+#define TUXJUMP_EDITOR_EDITOR_HEADER
 
-#include <string>
+#include "game/mode.hpp"
+#include "util/current_object.hpp"
 
-class GameConfig final
+class Level;
+class Positionf;
+
+class Editor final : public CurrentObject<Editor>,
+                     public GameMode
 {
 private:
-  static const std::string s_target_file;
+  std::unique_ptr<Level> m_level;
+
+  Positionf m_pos;
+  int m_selected_tilemap;
 
 public:
-  // Store all config properties.
-  bool show_col_rects;
+  Editor();
+  ~Editor();
 
-public:
-  GameConfig();
-  ~GameConfig();
+  void draw(const RenderContext& context) override;
+  void process_event(const SDL_Event& ev) override;
 
-  void read();
-  void save();
+private:
+  Editor(const Editor&) = delete;
+  Editor& operator=(const Editor&) = delete;
 };
-
-extern GameConfig* CONFIG;
 
 #endif

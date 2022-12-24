@@ -39,7 +39,7 @@ public:
   ~TileSet();
 
   void draw_tile(const RenderContext& context, const int& id,
-                 const Positionf& pos) const;
+                 const Positionf& pos, const bool& col_rect, const float& alpha) const;
 
   // Get properties
   std::string get_tiles_folder() const;

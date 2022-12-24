@@ -23,6 +23,7 @@
 
 #include <iostream>
 
+#include "editor/editor.hpp"
 #include "game/resources.hpp"
 #include "game/session.hpp"
 #include "gui/menu_manager.hpp"
@@ -170,15 +171,14 @@ GameManager::update()
     switch (action)
     {
       case ACTION_EXIT_GAME:
-      {
         m_game_mode.reset(new MenuManager());
         break;
-      }
+      case ACTION_START_EDITOR:
+        m_game_mode.reset(new Editor());
+        break;
       case ACTION_START_GAME:
-      {
         m_game_mode.reset(new GameSession());
         break;
-      }
     }
   }
 

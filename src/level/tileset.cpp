@@ -49,7 +49,7 @@ TileSet::~TileSet()
 
 void
 TileSet::draw_tile(const RenderContext& context, const int& id,
-                   const Positionf& pos) const
+                   const Positionf& pos, const bool& col_rect, const float& alpha) const
 {
   auto it = m_tile_textures.find(id);
   if (it == m_tile_textures.end())
@@ -57,8 +57,8 @@ TileSet::draw_tile(const RenderContext& context, const int& id,
 
   const Rectf rect(TILE_WIDTH * pos.x, TILE_WIDTH * pos.y, TILE_WIDTH, TILE_WIDTH);
 
-  context.draw_texture(it->second, rect);
-  if (CONFIG->show_col_rects) // Draw collision rect, if enabled.
+  context.draw_texture(it->second, rect, alpha);
+  if (col_rect && CONFIG->show_col_rects) // Draw collision rect, if enabled.
     context.draw_rect(rect, Resources::Colors::RED);
 }
 

@@ -11,7 +11,7 @@ include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${PHYSFS_INCLUDE_DIR})
 include_directories(src)
 
-file(GLOB SRCFILES src/*.cpp src/collision/*.cpp src/control/*.cpp src/game/*.cpp src/gui/*.cpp src/gui/menu/*.cpp src/level/*.cpp src/util/*.cpp src/video/*.cpp)
+file(GLOB SRCFILES src/*.cpp src/collision/*.cpp src/control/*.cpp src/editor/*.cpp src/game/*.cpp src/gui/*.cpp src/gui/menu/*.cpp src/level/*.cpp src/util/*.cpp src/video/*.cpp)
 file(COPY data/ DESTINATION data)
 add_executable(TuxJump ${SRCFILES})
 

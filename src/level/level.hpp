@@ -33,6 +33,9 @@ class FileReader;
 class Level final : public CurrentObject<Level>
 {
 public:
+  typedef std::vector<std::unique_ptr<TileMap>> TileMapList;
+
+public:
   // Level data class
   class Data
   {
@@ -52,7 +55,7 @@ private:
   Data m_data;
 
   std::unique_ptr<TileSet> m_tileset;
-  std::vector<std::unique_ptr<TileMap>> m_tilemaps;
+  TileMapList m_tilemaps;
 
   SDL_Texture* m_background;
 
@@ -69,6 +72,7 @@ public:
 
   // Get properties
   const Data& get_data() const { return m_data; }
+  const TileMapList& get_tilemaps() const { return m_tilemaps; }
   const TileSet* get_tileset() const { return m_tileset.get(); }
 
 private:

@@ -52,8 +52,7 @@ Level::Level(const std::string& file_path) :
   m_data.read(reader);
 
   // Initialize the current tileset.
-  TileSet* tileset = new TileSet(reader.get_string("tileset"));
-  m_tileset.reset(tileset);
+  m_tileset.reset(new TileSet(reader.get_string("tileset")));
 
   // Iterate through all tilemaps and load them.
   FileReader tilemap_reader = reader.for_subcategory("tilemap");
@@ -68,7 +67,7 @@ Level::Level(const std::string& file_path) :
       int layer = 0;
       tilemap_data_reader.get("layer", layer);
 
-      m_tilemaps.push_back(std::make_unique<TileMap>(layer, tilemap_data_reader.read_int_array("tiles"), tileset));
+      m_tilemaps.push_back(std::make_unique<TileMap>(layer, tilemap_data_reader.read_int_array("tiles"), this));
     }
     catch (...) // There are no more tilemaps available.
     {
@@ -100,7 +99,7 @@ Level::draw(const RenderContext& context, TileMap::Layer layer,
   for (const auto& tilemap : m_tilemaps)
   {
     if (tilemap->get_layer_type() == layer)
-      tilemap->draw(context, x_offset, y_offset, m_data.width);
+      tilemap->draw(context, x_offset, y_offset);
   }
 }
 
@@ -125,7 +124,7 @@ Level::collision(const Rectf& target, const float& x_offset,
   {
     if (tilemap->get_layer_type() != TileMap::LAYER_INTERACTIVE) continue;
 
-    const CollisionType col = tilemap->collision(target, x_offset, y_offset, m_data.width);
+    const CollisionType col = tilemap->collision(target, x_offset, y_offset);
     if (col != COLLISION_NONE)
       return col;
   }

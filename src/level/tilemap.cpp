@@ -18,13 +18,14 @@
 
 #include "collision/util.hpp"
 #include "game/global.hpp"
+#include "level/level.hpp"
 #include "level/tileset.hpp"
 #include "util/log.hpp"
 
-TileMap::TileMap(int layer, std::vector<int> tiles, const TileSet* tileset) :
+TileMap::TileMap(int layer, std::vector<int> tiles, const Level* parent) :
   m_layer(layer),
   m_tiles(std::move(tiles)),
-  m_tileset(tileset)
+  m_parent(parent)
 {
 }
 
@@ -35,13 +36,17 @@ TileMap::~TileMap()
 
 void
 TileMap::draw(const RenderContext& context, const float& x_offset,
-              const float& y_offset, const int& width) const
+              const float& y_offset, const bool& col_rects, const float& alpha) const
 {
+  const TileSet* tileset = m_parent->get_tileset();
+  const int& width = m_parent->get_data().width;
+
   for (int i = 0; i < static_cast<int>(m_tiles.size()); i++)
   {
     if (m_tiles[i] <= 0) continue; // Empty tile
 
-    m_tileset->draw_tile(context, m_tiles[i], get_tile_pos(i, x_offset, y_offset, width));
+    tileset->draw_tile(context, m_tiles[i], get_tile_pos(i, x_offset, y_offset, width),
+                       col_rects, alpha);
   }
 }
 
@@ -56,8 +61,10 @@ TileMap::get_tile_pos(const int& index, const float& x_offset,
 
 CollisionType
 TileMap::collision(const Rectf& target, const float& x_offset,
-                   const float& y_offset, const int& width) const
+                   const float& y_offset) const
 {
+  const int width = m_parent->get_data().width;
+
   for (int i = 0; i < static_cast<int>(m_tiles.size()); i++)
   {
     if (m_tiles[i] <= 0) continue; // Empty tile

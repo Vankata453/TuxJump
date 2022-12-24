@@ -41,8 +41,8 @@ public:
   SDL_FRect create_rect(const float& x, const float& y, const float& w, const float& h) const;
 
   // Draw textures
-  void draw_texture(SDL_Texture* texture, const float& x, const float& y, const float& w, const float& h) const;
-  void draw_texture(SDL_Texture* texture, const Rectf& rect) const;
+  void draw_texture(SDL_Texture* texture, const float& x, const float& y, const float& w, const float& h, const float& alpha = 255) const;
+  void draw_texture(SDL_Texture* texture, const Rectf& rect, const float& alpha = 255) const;
 
   SDL_Texture* draw_image(const std::string& path, const float& x, const float& y, const float& w, const float& h) const;
   SDL_Texture* draw_image(const std::string& path, const Rectf& rect) const;

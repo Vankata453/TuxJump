@@ -22,8 +22,8 @@
 #include "collision/type.hpp"
 #include "math/rect.hpp"
 
+class Level;
 class RenderContext;
-class TileSet;
 
 // A class used to store and manage level tiles.
 class TileMap final
@@ -40,19 +40,19 @@ private:
   const int m_layer;
   const std::vector<int> m_tiles;
 
-  const TileSet* m_tileset;
+  const Level* m_parent;
 
 public:
-  TileMap(int layer, std::vector<int> tiles, const TileSet* tileset);
+  TileMap(int layer, std::vector<int> tiles, const Level* parent);
   ~TileMap();
 
   void draw(const RenderContext& context, const float& x_offset,
-            const float& y_offset, const int& width) const;
+            const float& y_offset, const bool& col_rects = true, const float& alpha = 255) const;
 
   Positionf get_tile_pos(const int& index, const float& x_offset,
                          const float& y_offset, const int& width) const;
   CollisionType collision(const Rectf& target, const float& x_offset,
-                          const float& y_offset, const int& width) const;
+                          const float& y_offset) const;
 
   Layer get_layer_type() const;
 

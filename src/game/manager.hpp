@@ -41,6 +41,7 @@ private:
   enum ScheduledAction
   {
     ACTION_START_GAME,
+    ACTION_START_EDITOR,
     ACTION_EXIT_GAME
   };
 
@@ -70,9 +71,11 @@ public:
 
   void main_loop();
 
+  #define GAME_MANAGER_PUSH_ACTION(mode) m_scheduled_actions.push_back(mode);
   // Game mode management
-  void start_game() { m_scheduled_actions.push_back(ACTION_START_GAME); }
-  void exit_game() { m_scheduled_actions.push_back(ACTION_EXIT_GAME); }
+  void start_game() { GAME_MANAGER_PUSH_ACTION(ACTION_START_GAME); }
+  void start_editor() { GAME_MANAGER_PUSH_ACTION(ACTION_START_EDITOR); }
+  void exit_game() { GAME_MANAGER_PUSH_ACTION(ACTION_EXIT_GAME); }
   void quit_game() { m_quit = true; }
 
 private:

@@ -14,28 +14,26 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_GAME_CONFIG_HEADER
-#define TUXJUMP_GAME_CONFIG_HEADER
+#ifndef TUXJUMP_EDITOR_OVERLAY_HEADER
+#define TUXJUMP_EDITOR_OVERLAY_HEADER
 
-#include <string>
+class RenderContext;
 
-class GameConfig final
+class EditorOverlay final
 {
 private:
-  static const std::string s_target_file;
+  static const float s_grid_width;
 
 public:
-  // Store all config properties.
-  bool show_col_rects;
+  EditorOverlay();
+  ~EditorOverlay();
 
-public:
-  GameConfig();
-  ~GameConfig();
+  void draw(const RenderContext& context);
+  void process_event(const SDL_Event& ev);
 
-  void read();
-  void save();
+private:
+  EditorOverlay(const EditorOverlay&) = delete;
+  EditorOverlay& operator=(const EditorOverlay&) = delete;
 };
-
-extern GameConfig* CONFIG;
 
 #endif
