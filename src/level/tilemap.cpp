@@ -27,6 +27,18 @@ TileMap::TileMap(int layer, std::vector<int> tiles, const Level* parent) :
   m_tiles(std::move(tiles)),
   m_parent(parent)
 {
+  const Level::Data& level_data = m_parent->get_data();
+  const float tiles_total = level_data.width * level_data.height;
+  // If tiles are less than the level width, add zeros to fill the remaining space.
+  while (static_cast<int>(m_tiles.size()) < tiles_total)
+  {
+    m_tiles.push_back(0);
+  }
+  // If tiles are more than the level width, remove tiles from the end.
+  while (static_cast<int>(m_tiles.size()) > tiles_total)
+  {
+    m_tiles.pop_back();
+  }
 }
 
 TileMap::~TileMap()
@@ -78,6 +90,15 @@ TileMap::collision(const Rectf& target, const float& x_offset,
   }
 
   return COLLISION_NONE;
+}
+
+
+void
+TileMap::insert_tile(const int& id, const Position& coords)
+{
+  const int index = m_parent->get_data().width * coords.y + coords.x;
+  if (index < 0 || index >= static_cast<int>(m_tiles.size())) return; // Make sure the index is valid.
+  m_tiles[index] = id;
 }
 
 

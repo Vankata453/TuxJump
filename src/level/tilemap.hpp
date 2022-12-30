@@ -38,8 +38,7 @@ public:
 
 private:
   const int m_layer;
-  const std::vector<int> m_tiles;
-
+  std::vector<int> m_tiles;
   const Level* m_parent;
 
 public:
@@ -53,6 +52,8 @@ public:
                          const float& y_offset, const int& width) const;
   CollisionType collision(const Rectf& target, const float& x_offset,
                           const float& y_offset) const;
+
+  void insert_tile(const int& id, const Position& coords);
 
   Layer get_layer_type() const;
 

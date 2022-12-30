@@ -1,4 +1,4 @@
-//  TuxJump
+//  SuperTux
 //  Copyright (C) 2022 Vankata453
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -14,18 +14,14 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "game/global.hpp"
+#ifndef TUXJUMP_LEVEL_TILE_HEADER
+#define TUXJUMP_LEVEL_TILE_HEADER 
 
-// Important attributes for game startup
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 480;
-const int GAME_FPS = 60;
+#include <SDL2/SDL.h>
 
-// Information about the game
-const std::string GAME_TITLE = "TuxJump";
-const bool GAME_DEV_BUILD = true;
+struct Tile
+{
+  SDL_Texture* texture;
+};
 
-// Other globally used data variables
-const float TILE_WIDTH_DEFAULT = 32.0f;
-float TILE_WIDTH = TILE_WIDTH_DEFAULT;
-const std::string FILE_CATEGORY_SEPARATOR = "->";
+#endif

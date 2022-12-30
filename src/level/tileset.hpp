@@ -20,19 +20,24 @@
 #include <string>
 #include <map>
 
+#include "level/tile.hpp"
 #include "video/render_context.hpp"
 
 // A class, which points tile IDs to their respective textures.
 // Used to allow drawing a tile's texture on-screen.
 class TileSet final
 {
+public:
+  typedef std::pair<const int, Tile> TileEntry;
+  typedef std::map<const int, Tile> TileEntries;
+
 private:
   static const std::string s_tiles_folder;
   static const std::string s_tilesets_folder;
 
 private:
   const std::string m_name;
-  std::map<int, SDL_Texture*> m_tile_textures;
+  TileEntries m_tile_entries;
 
 public:
   TileSet(const std::string& file);
@@ -41,8 +46,13 @@ public:
   void draw_tile(const RenderContext& context, const int& id,
                  const Positionf& pos, const bool& col_rect, const float& alpha) const;
 
+  // Get tile data
+  const TileEntry& get_tile_entry(const int& index) const;
+  SDL_Texture* get_tile_texture(const int& index) const;
+
   // Get properties
   std::string get_tiles_folder() const;
+  const TileEntries& get_tile_entries() const { return m_tile_entries; }
 
 private:
   // Static utilities

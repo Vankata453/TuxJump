@@ -23,26 +23,25 @@
 
 #include "game/global.hpp"
 
-class Log
+namespace Log
 {
-public:
-  static void warning(const std::string& text)
+  template<typename T>
+  void warning(const T& data)
   {
-    std::cout << GAME_TITLE << ": Warning: " << text << std::endl;
+    std::cout << GAME_TITLE << ": Warning: " << data << std::endl;
   }
 
   // Thrown errors will be caught in the GameManager.
   template<typename T>
-  static void fatal(T text)
+  void fatal(const T& data)
   {
-    throw std::runtime_error(GAME_TITLE + ": Fatal error: " + text);
+    throw std::runtime_error(GAME_TITLE + ": Fatal error: " + data);
   }
-
   template<typename T, typename U>
-  static void fatal(T text, U data)
+  void fatal(const T& lhs, const U& rhs)
   {
     std::stringstream err;
-    err << GAME_TITLE << ": Fatal error: " << text << data << std::endl;
+    err << GAME_TITLE << ": Fatal error: " << lhs << rhs << std::endl;
     throw std::runtime_error(err.str());
   }
 };

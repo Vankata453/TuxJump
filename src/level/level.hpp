@@ -41,6 +41,7 @@ public:
   {
   public:
     int width;
+    int height;
     float spawn_height;
     std::string background;
     Color background_fill;

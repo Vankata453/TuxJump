@@ -33,12 +33,13 @@ namespace Resources
 
   namespace Colors
   {
-    extern Color BLACK;
-    extern Color WHITE;
-    extern Color RED;
-    extern Color GREEN;
-    extern Color BLUE;
-    extern Color YELLOW;
+    extern const Color BLACK;
+    extern const Color GRAY;
+    extern const Color WHITE;
+    extern const Color RED;
+    extern const Color GREEN;
+    extern const Color BLUE;
+    extern const Color YELLOW;
   }
 }
 

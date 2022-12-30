@@ -14,18 +14,27 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "game/global.hpp"
+#ifndef TUXJUMP_EDITOR_WIDGET_HEADER
+#define TUXJUMP_EDITOR_WIDGET_HEADER
 
-// Important attributes for game startup
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 480;
-const int GAME_FPS = 60;
+#include "video/render_context.hpp"
 
-// Information about the game
-const std::string GAME_TITLE = "TuxJump";
-const bool GAME_DEV_BUILD = true;
+class EditorWidget
+{
+public:
+  EditorWidget() {}
+  virtual ~EditorWidget() = default;
 
-// Other globally used data variables
-const float TILE_WIDTH_DEFAULT = 32.0f;
-float TILE_WIDTH = TILE_WIDTH_DEFAULT;
-const std::string FILE_CATEGORY_SEPARATOR = "->";
+  virtual void draw(const RenderContext& context) = 0;
+  virtual void update() {}
+
+  virtual bool process_mouse_motion(const SDL_MouseMotionEvent& motion) { return false; }
+  virtual bool process_mouse_down(const SDL_MouseButtonEvent& button) { return false; }
+  virtual bool process_mouse_up(const SDL_MouseButtonEvent& button) { return false; }
+
+private:
+  EditorWidget(const EditorWidget&) = delete;
+  EditorWidget& operator=(const EditorWidget&) = delete;
+};
+
+#endif

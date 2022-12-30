@@ -14,43 +14,38 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef TUXJUMP_EDITOR_OVERLAY_HEADER
-#define TUXJUMP_EDITOR_OVERLAY_HEADER
+#ifndef TUXJUMP_EDITOR_TOOLBOX_HEADER
+#define TUXJUMP_EDITOR_TOOLBOX_HEADER
 
 #include "editor/widget.hpp"
 
-#include "level/tileset.hpp"
+class TileSet;
 
-class EditorOverlay final : public EditorWidget
+class EditorToolbox final : public EditorWidget
 {
 private:
-  const int& m_width;
-  const int& m_height;
-  const Positionf& m_pos;
+  static const float s_height;
+  static const float s_collapse_bar_height;
+  static const float s_hover_resize;
 
-  bool m_inserting_tiles;
-  const TileSet::TileEntry* m_selected_tile;
-  Position m_preview_coords;
+private:
+  const TileSet& m_tileset;
+  bool m_collapsed;
+  int m_hovered_tile;
+  int m_selected_tile;
 
 public:
-  EditorOverlay();
-  ~EditorOverlay();
+  EditorToolbox();
+  ~EditorToolbox();
 
   void draw(const RenderContext& context) override;
-  void update() override;
 
   bool process_mouse_motion(const SDL_MouseMotionEvent& motion) override;
   bool process_mouse_down(const SDL_MouseButtonEvent& button) override;
-  bool process_mouse_up(const SDL_MouseButtonEvent& button) override;
-
-  void insert_tile();
-
-  // Set properties
-  void set_selected_tile(const TileSet::TileEntry* tile) { m_selected_tile = tile; }
 
 private:
-  EditorOverlay(const EditorOverlay&) = delete;
-  EditorOverlay& operator=(const EditorOverlay&) = delete;
+  EditorToolbox(const EditorToolbox&) = delete;
+  EditorToolbox& operator=(const EditorToolbox&) = delete;
 };
 
 #endif

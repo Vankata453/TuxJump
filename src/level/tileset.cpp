@@ -29,7 +29,7 @@ const std::string TileSet::s_tilesets_folder = "images/tilesets";
 
 TileSet::TileSet(const std::string& file) :
   m_name(name_from_file(file)),
-  m_tile_textures()
+  m_tile_entries()
 {
   FileReader reader(FileSystem::join(s_tilesets_folder, file));
 
@@ -39,7 +39,7 @@ TileSet::TileSet(const std::string& file) :
   for (auto& tile_entry : reader.get_entries())
   {
     SDL_Texture* tile_texture = texture_manager->load_image(FileSystem::join(folder, tile_entry.second));
-    m_tile_textures[std::stoi(tile_entry.first)] = tile_texture;
+    m_tile_entries[std::stoi(tile_entry.first)] = { tile_texture };
   }
 }
 
@@ -51,15 +51,31 @@ void
 TileSet::draw_tile(const RenderContext& context, const int& id,
                    const Positionf& pos, const bool& col_rect, const float& alpha) const
 {
-  auto it = m_tile_textures.find(id);
-  if (it == m_tile_textures.end())
+  auto it = m_tile_entries.find(id);
+  if (it == m_tile_entries.end())
     Log::fatal("No tile with ID " + std::to_string(id));
 
   const Rectf rect(TILE_WIDTH * pos.x, TILE_WIDTH * pos.y, TILE_WIDTH, TILE_WIDTH);
 
-  context.draw_texture(it->second, rect, alpha);
+  context.draw_texture(it->second.texture, rect, alpha);
   if (col_rect && CONFIG->show_col_rects) // Draw collision rect, if enabled.
     context.draw_rect(rect, Resources::Colors::RED);
+}
+
+// Get tile data
+
+const TileSet::TileEntry&
+TileSet::get_tile_entry(const int& index) const
+{
+  auto it = m_tile_entries.begin();
+  std::advance(it, index);
+  return *it;
+}
+
+SDL_Texture*
+TileSet::get_tile_texture(const int& index) const
+{
+  return get_tile_entry(index).second.texture;
 }
 
 // Get properties

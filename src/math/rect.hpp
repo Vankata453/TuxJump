@@ -80,6 +80,11 @@ public:
 
   virtual std::string to_string() const override { return Position::to_string() + " " + Size::to_string(); }
   SDL_Rect to_sdl() const { return { x, y, w, h }; }
+
+  Rect grown(const int& offset) const
+  {
+    return { x - offset, y - offset, w + offset, h + offset };
+  }
 };
 
 class Rectf final : public Positionf,
@@ -91,6 +96,11 @@ public:
 
   virtual std::string to_string() const override { return Positionf::to_string() + " " + Sizef::to_string(); }
   SDL_FRect to_sdl() const { return { x, y, w, h }; }
+
+  Rectf grown(const float& offset) const
+  {
+    return { x - offset, y - offset, w + offset, h + offset };
+  }
 };
 
 #endif

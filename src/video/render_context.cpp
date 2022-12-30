@@ -74,7 +74,8 @@ RenderContext::create_rect(const float& x, const float& y, const float& w, const
 // Draw textures
 
 void
-RenderContext::draw_texture(SDL_Texture* texture, const float& x, const float& y, const float& w, const float& h, const float& alpha) const
+RenderContext::draw_texture(SDL_Texture* texture, const float& x, const float& y,
+                            const float& w, const float& h, const float& alpha) const
 {
   SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
   SDL_SetTextureAlphaMod(texture, alpha);

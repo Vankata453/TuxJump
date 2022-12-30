@@ -20,17 +20,26 @@
 #include "game/mode.hpp"
 #include "util/current_object.hpp"
 
+class EditorWidget;
 class Level;
 class Positionf;
+class TileMap;
 
 class Editor final : public CurrentObject<Editor>,
                      public GameMode
 {
 private:
+  static const float s_nav_speed;
+
+private:
   std::unique_ptr<Level> m_level;
+  std::vector<std::unique_ptr<EditorWidget>> m_widgets;
+  std::vector<EditorWidget*> m_reverse_widgets;
 
   Positionf m_pos;
   int m_selected_tilemap;
+
+  bool m_control_held;
 
 public:
   Editor();
@@ -38,6 +47,24 @@ public:
 
   void draw(const RenderContext& context) override;
   void process_event(const SDL_Event& ev) override;
+
+  void check_level_pos();
+
+  // Get widgets
+  template<class C>
+  C* get_widget()
+  {
+    for (auto& widget_ptr : m_widgets)
+    {
+      C* widget = dynamic_cast<C*>(widget_ptr.get());
+      if (widget) return widget;
+    }
+    return nullptr;
+  }
+
+  // Get properties
+  const Positionf& get_pos() const { return m_pos; }
+  TileMap& get_selected_tilemap() const;
 
 private:
   Editor(const Editor&) = delete;

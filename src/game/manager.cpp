@@ -117,7 +117,7 @@ GameManager::main_loop()
     try
     {
       // Process events, if any.
-      if (SDL_PollEvent(&m_event_handler) != 0)
+      while (SDL_PollEvent(&m_event_handler))
       {
         if (m_event_handler.type == SDL_QUIT) // Quit registered by SDL
         {

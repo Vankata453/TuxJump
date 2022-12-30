@@ -24,6 +24,7 @@
 
 Level::Data::Data() :
   width(5),
+  height(20),
   spawn_height(-1.0f),
   background(),
   background_fill(254, 250, 231)
@@ -34,6 +35,7 @@ void
 Level::Data::read(FileReader& reader)
 {
   reader.get("width", width);
+  reader.get("height", height);
   reader.get("spawn_height", spawn_height);
   reader.get("background", background);
   reader.get("background_fill", background_fill);
