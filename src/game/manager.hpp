@@ -27,9 +27,12 @@
 #include <memory>
 #include <vector>
 
-#include "control/manager.hpp"
-#include "game/config.hpp"
-#include "game/mode.hpp"
+#include "video/render_context.hpp"
+
+class ControlManager;
+class GameConfig;
+class GameMode;
+class MenuManager;
 
 class GameManager final : public CurrentObject<GameManager>
 {
@@ -64,6 +67,7 @@ private:
   SDL_Event m_event_handler;
   std::unique_ptr<ControlManager> m_control_manager;
   std::unique_ptr<GameConfig> m_game_config;
+  std::unique_ptr<MenuManager> m_menu_manager;
 
 public:
   GameManager();

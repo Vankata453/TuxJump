@@ -36,10 +36,10 @@ MenuManager::draw(const RenderContext& context)
   current_menu()->draw(context);
 }
 
-void
+bool
 MenuManager::process_event(const SDL_Event& ev)
 {
-  if (!is_active()) return;
+  if (!is_active()) return false;
 
   switch (ev.type)
   {
@@ -56,6 +56,7 @@ MenuManager::process_event(const SDL_Event& ev)
       }
     }
   }
+  return true;
 }
 
 // Menu management

@@ -23,7 +23,10 @@
 
 #include <iostream>
 
+#include "control/manager.hpp"
 #include "editor/editor.hpp"
+#include "game/config.hpp"
+#include "game/main_screen.hpp"
 #include "game/resources.hpp"
 #include "game/session.hpp"
 #include "gui/menu_manager.hpp"
@@ -40,7 +43,8 @@ GameManager::GameManager() :
   m_render_context(),
   m_event_handler(),
   m_control_manager(),
-  m_game_config()
+  m_game_config(),
+  m_menu_manager()
 {
   try
   {
@@ -65,6 +69,8 @@ GameManager::GameManager() :
 
     m_render_context.reset(new RenderContext(m_window));
     Resources::Fonts::init_fonts();
+
+    m_menu_manager.reset(new MenuManager());
   }
   catch (std::exception& err)
   {
@@ -83,6 +89,10 @@ GameManager::~GameManager()
   try
   {
     // Perform required destructions.
+    m_game_mode.reset();
+
+    m_menu_manager.reset();
+
     Resources::Fonts::close_fonts();
     m_render_context.reset();
 
@@ -154,11 +164,15 @@ GameManager::draw(const RenderContext& context)
 {
   update();
   m_game_mode->draw(context);
+  m_menu_manager->draw(context);
 }
 
 void
 GameManager::process_event()
 {
+  // If the menu manager processes an event, do not process further events.
+  if (m_menu_manager->process_event(m_event_handler)) return;
+
   m_game_mode->process_event(m_event_handler);
 }
 
@@ -171,7 +185,7 @@ GameManager::update()
     switch (action)
     {
       case ACTION_EXIT_GAME:
-        m_game_mode.reset(new MenuManager());
+        m_game_mode.reset(new MainScreen());
         break;
       case ACTION_START_EDITOR:
         m_game_mode.reset(new Editor());

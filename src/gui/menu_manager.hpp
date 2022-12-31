@@ -24,8 +24,7 @@
 
 #include "gui/menu_factory.hpp"
 
-class MenuManager final : public CurrentObject<MenuManager>,
-                          public GameMode
+class MenuManager final : public CurrentObject<MenuManager>
 {
 private:
   std::vector<std::unique_ptr<Menu>> m_menu_stack;
@@ -34,8 +33,8 @@ public:
   MenuManager();
   ~MenuManager() override;
 
-  void draw(const RenderContext& context) override;
-  void process_event(const SDL_Event& ev) override;
+  void draw(const RenderContext& context);
+  bool process_event(const SDL_Event& ev);
 
   // Menu management
   void push_menu(std::unique_ptr<Menu> menu);
