@@ -101,6 +101,63 @@ TileMap::insert_tile(const int& id, const Position& coords)
   m_tiles[index] = id;
 }
 
+void
+TileMap::resize(const int& add_width, const int& add_height)
+{
+  // Modify a local copy of the tiles, in case of an error.
+  TileMap::Tiles tiles = m_tiles;
+
+  int width = m_parent->get_data().width;
+  const int& height = m_parent->get_data().height;
+
+  if (add_width < 0) // Removing width.
+  {
+    const int remove_width = add_width * -1;
+
+    if (remove_width >= width) // Check for invalid "remove_width" value.
+      throw std::runtime_error("Cannot remove width, which is equal to or more than the current width.");
+
+    for (int i = width - remove_width - 1; i < static_cast<int>(tiles.size()); i += width - remove_width)
+    {
+      // Remove the last tile "add_width" times for every row.
+      for (int y = 0; y < remove_width; y++)
+        tiles.erase(tiles.begin() + i + 1);
+    }
+    width -= remove_width;
+  }
+  else // Adding width.
+  {
+    for (int i = width; i < static_cast<int>(tiles.size()) + add_width; i += width + add_width)
+    {
+      // Insert an empty tile "add_width" times on every row.
+      for (int y = 0; y < add_width; y++)
+        tiles.insert(tiles.begin() + i, 1);
+    }
+    width += add_width;
+  }
+
+  if (add_height < 0) // Removing height.
+  {
+    const int remove_height = add_height * -1;
+
+    if (remove_height >= height) // Check for invalid "remove_height" value.
+      throw std::runtime_error("Cannot remove height, which is equal to or more than the current height.");
+
+    // Remove the last row every "add_height" times.
+    for (int y = 0; y < remove_height * width; y++)
+      tiles.pop_back();
+  }
+  else // Adding height.
+  {
+    // Insert a new row every "add_height" times.
+    for (int y = 0; y < add_height * width; y++)
+      tiles.push_back(1);
+  }
+
+  // No errors have occured, so apply the local tile changes.
+  m_tiles = tiles;
+}
+
 
 TileMap::Layer
 TileMap::get_layer_type() const

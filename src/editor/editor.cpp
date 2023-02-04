@@ -145,7 +145,7 @@ Editor::process_event(const SDL_Event& ev)
     {
       // Zoom in/out, using the mouse wheel, when holding CTRL.
       if (m_control_held)
-        TILE_WIDTH -= ev.wheel.preciseY;
+        TILE_WIDTH += ev.wheel.preciseY;
       break;
     }
     case SDL_MOUSEMOTION:

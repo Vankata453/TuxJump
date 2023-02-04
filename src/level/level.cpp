@@ -58,7 +58,6 @@ Level::Level(const std::string& file_path) :
 
   // Iterate through all tilemaps and load them.
   FileReader tilemap_reader = reader.for_subcategory("tilemap");
-  std::vector<int> current_tiles;
   for (int i = 0; i < 500; i++) // Allow for a maximum of 500 tilemaps.
   {
     try
@@ -132,4 +131,26 @@ Level::collision(const Rectf& target, const float& x_offset,
   }
 
   return COLLISION_NONE;
+}
+
+
+void
+Level::resize(const int& add_width, const int& add_height)
+{
+  // Resize all tilemaps.
+  for (const auto& tilemap : m_tilemaps)
+  {
+    try
+    {
+      tilemap->resize(add_width, add_height);
+    }
+    catch (std::exception& err)
+    {
+      Log::warning("TileMap resize error: ", err.what());
+      return;
+    }
+  }
+  // Update the level data.
+  m_data.width += add_width;
+  m_data.height += add_height;
 }

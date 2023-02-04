@@ -29,6 +29,9 @@ class RenderContext;
 class TileMap final
 {
 public:
+  typedef std::vector<int> Tiles;
+
+public:
   enum Layer
   {
     LAYER_BACKGROUND,
@@ -38,7 +41,7 @@ public:
 
 private:
   const int m_layer;
-  std::vector<int> m_tiles;
+  Tiles m_tiles;
   const Level* m_parent;
 
 public:
@@ -54,6 +57,7 @@ public:
                           const float& y_offset) const;
 
   void insert_tile(const int& id, const Position& coords);
+  void resize(const int& add_width, const int& add_height);
 
   Layer get_layer_type() const;
 

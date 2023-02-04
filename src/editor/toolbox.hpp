@@ -19,20 +19,36 @@
 
 #include "editor/widget.hpp"
 
+#include <vector>
+#include <functional>
+
 class TileSet;
 
 class EditorToolbox final : public EditorWidget
 {
+public:
+  struct Option
+  {
+    const std::string name;
+    const std::function<void ()> action;
+  };
+
 private:
   static const float s_height;
   static const float s_collapse_bar_height;
+
+  static const float s_reserved_for_tiles;
   static const float s_hover_resize;
+
+  static const std::vector<Option> s_options;
 
 private:
   const TileSet& m_tileset;
   bool m_collapsed;
+
   int m_hovered_tile;
   int m_selected_tile;
+  int m_hovered_option;
 
 public:
   EditorToolbox();

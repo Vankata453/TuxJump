@@ -105,7 +105,7 @@ RenderContext::draw_image(const std::string& path, const Rectf& rect) const
 }
 
 Rectf
-RenderContext::draw_text(TTF_Font* font, const std::string& text, float x, const float& y,
+RenderContext::draw_text(TTF_Font* font, const std::string& text, float x, float y,
                          const Alignment& alignment, const Color& color) const
 {
   const auto texture = m_texture_manager->load_text(font, text, color);
@@ -120,6 +120,8 @@ RenderContext::draw_text(TTF_Font* font, const std::string& text, float x, const
       x -= texture.size.w;
       break;
   }
+  // Center the vertical position of the text.
+  y -= texture.size.h / 2;
 
   draw_texture(texture.texture, x, y, texture.size.w, texture.size.h);
 

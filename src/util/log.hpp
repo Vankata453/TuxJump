@@ -30,6 +30,11 @@ namespace Log
   {
     std::cout << GAME_TITLE << ": Warning: " << data << std::endl;
   }
+  template<typename T, typename U>
+  void warning(const T& lhs, const U& rhs)
+  {
+    std::cout << GAME_TITLE << ": Warning: " << lhs << rhs << std::endl;
+  }
 
   // Thrown errors will be caught in the GameManager.
   template<typename T>

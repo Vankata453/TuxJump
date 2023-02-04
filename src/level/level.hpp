@@ -71,6 +71,8 @@ public:
   CollisionType collision(const Rectf& target, const float& x_offset,
                           const float& y_offset) const;
 
+  void resize(const int& add_width, const int& add_height = 0);
+
   // Get properties
   const Data& get_data() const { return m_data; }
   const TileMapList& get_tilemaps() const { return m_tilemaps; }
